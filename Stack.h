@@ -12,7 +12,7 @@ struct stack
     int  buff_len;
 };
 
-stack createStack ();
+stack *createStack ();
 int push (stack* dest, type_t value);   
 int pop (stack* dest);
 type_t top (stack* dest);

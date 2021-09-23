@@ -4,17 +4,19 @@ const int BUFFER_INIT_SIZE = 10;
 
 const int MEMORY_ALLOC_ERR = -1;
 
-stack createStack ()
+stack *createStack ()
 {
     type_t *buffer = (type_t *) calloc (BUFFER_INIT_SIZE, sizeof(type_t));
     assert (buffer);
 
+    stack *stack_ptr = (stack *) calloc (1, sizeof (stack));
     stack new_stack; 
     new_stack.buffer = buffer;
     new_stack.elements_num = 0;
     new_stack.buff_len = BUFFER_INIT_SIZE;
+    *stack_ptr = new_stack;
     
-    return new_stack;
+    return stack_ptr;
 }
 
 int push (stack* dest, type_t value)
