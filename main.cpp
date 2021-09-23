@@ -6,7 +6,25 @@ int main (int argc, char** argv)
 
     push (&st, 6);
     push (&st, 3);
+    push (&st, 3);
+    push (&st, 3);
+    push (&st, 3);
+    push (&st, 3);
+    push (&st, 3);
+    push (&st, 3);
+    push (&st, 3);
+    push (&st, 3);
+    push (&st, 3);
+    push (&st, 3);
+    push (&st, 3);
 
-    pop (&st);
-    top (&st);    
+    printf ("%d\n", top (&st));
+    printf ("%d\n", top (&st));
+    printf ("%d\n", top (&st));
+    printf ("%d\n", top (&st));
+    printf ("%d\n", top (&st));
+    printf ("%d\n", top (&st));
+    printf ("%d\n", top (&st));
+    
+    
 }
