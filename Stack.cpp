@@ -9,7 +9,7 @@ stack createStack ()
     type_t *buffer = (type_t *) calloc (BUFFER_INIT_SIZE, sizeof(type_t));
     assert (buffer);
 
-    stack new_stack; // = (stack) calloc (1, sizeof(stack));
+    stack new_stack; 
     new_stack.buffer = buffer;
     new_stack.elements_num = 0;
     new_stack.buff_len = BUFFER_INIT_SIZE;
@@ -34,7 +34,6 @@ int push (stack* dest, type_t value)
     assert (dest->buffer);
     *(dest->buffer + dest->elements_num) = value;
     (dest->elements_num)++;
-    
 
     return 0;
 }
