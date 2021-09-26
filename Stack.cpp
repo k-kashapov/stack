@@ -41,6 +41,16 @@ int StackDtor (stack_t *stk)
     return 0;
 }
 
+int StackValid (stack_t *stk)
+{
+    if (stk->buffer == (type_t *)ERR_PTR || stk->capacity < 0 || stk->size < 0)
+    {        
+        return 0;
+    }
+
+    return 1;
+}
+         
 int StackResize (stack_t *stk, int direction)
 {
     if (stk->size == 0)
