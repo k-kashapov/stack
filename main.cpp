@@ -6,15 +6,15 @@ int main (int argc, char** argv)
     StackInit(&st);
 
     StackPush (&st, 6);
-    StackPush (&st, 6);
-    StackPush (&st, 6);
-
-    StackPop(&st);
-    StackPop(&st);
-    StackPop(&st);
+    StackPush (&st, 7);
+    StackPush (&st, 8);
 
     int err = 0;
     printf ("%d\n", StackTop (&st, &err));
+    
+    printf ("%d\n", StackTop (&st, &err));
+    
+    printf ("%d\n", StackTop (&st, &err));    
     
     StackDtor (&st);
 

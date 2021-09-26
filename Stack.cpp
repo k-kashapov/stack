@@ -53,13 +53,13 @@ int StackValid (stack_t *stk)
          
 int StackResize (stack_t *stk, int direction)
 {
-    if (stk->size == 0)
+    if (stk->capacity == 0)
     {
         type_t *buffer = (type_t *) calloc (BUFFER_INIT_SIZE, sizeof(type_t));
         assert (buffer);
 
         stk->buffer = buffer;
-        stk->size = BUFFER_INIT_SIZE;
+        stk->capacity = BUFFER_INIT_SIZE;
 
         return 0;
     }
@@ -68,11 +68,11 @@ int StackResize (stack_t *stk, int direction)
 
     if (direction > 0)
     {
-        buff = (type_t *) realloc (stk->buffer, (stk->size * 2) * sizeof (type_t)); 
+        buff = (type_t *) realloc (stk->buffer, (stk->capacity * 2) * sizeof (type_t)); 
     }
     else
     {
-        buff = (type_t *) realloc (stk->buffer, (stk->size / 2) * sizeof (type_t));
+        buff = (type_t *) realloc (stk->buffer, (stk->capacity / 2) * sizeof (type_t));
     }
 
     if (!buff)
@@ -84,11 +84,11 @@ int StackResize (stack_t *stk, int direction)
     stk->buffer = buff;
     if (direction > 0)
     {
-        stk->size *= 2;
+        stk->capacity *= 2;
     }
     else
     {
-        stk->size /= 2;
+        stk->capacity /= 2;
     }
 
     return 0;
@@ -96,30 +96,28 @@ int StackResize (stack_t *stk, int direction)
 
 int StackPush (stack_t* stk, type_t value)
 {   
-    if (stk->capacity >= stk->size)
+    if (stk->size >= stk->capacity)
     {
         StackResize (stk, RESIZE_UP);  
     }
 
     assert (stk->buffer);
-    *(stk->buffer + stk->capacity) = value;
-    (stk->capacity)++;
+    stk->buffer[stk->size++] = value;
 
     return 0;
 }
 
 int StackPop (stack_t* stk)
 {
-    if (stk->capacity < 1)
+    if (stk->size < 1)
     {
         printf ("\nERROR: 0 elements in stack\n\n");
         return ZERO_ELEMENT_POP;
     }
     
-    *(stk->buffer + stk->capacity - 1) = 0;
-    stk->capacity--;
+    stk->buffer[--stk->size] = 0;
     
-    if (stk->capacity <= stk->size / 4)
+    if (stk->size <= stk->capacity / 4)
     {
         StackResize (stk, RESIZE_DOWN);
     }
@@ -131,7 +129,7 @@ type_t StackTop (stack_t* stk, int *err)
 {                  
     if (err)
     {
-        if (stk->capacity < 1)
+        if (stk->size < 1)
         {
             printf ("\nERROR: 0 elements in stack\n\n");
             *err = ZERO_ELEMENT_POP;
@@ -139,12 +137,11 @@ type_t StackTop (stack_t* stk, int *err)
         }
     }
 
-    type_t copy = *(stk->buffer + stk->capacity - 1);
+    type_t copy = *(stk->buffer + stk->size - 1);
 
-    *(stk->buffer + stk->capacity - 1) = 0;
-    stk->capacity--;
+    stk->buffer[--stk->size] = 0;
 
-    if (stk->capacity <= stk->size / 4)
+    if (stk->size <= stk->capacity / 4)
     {
         StackResize (stk, RESIZE_DOWN);
     }
