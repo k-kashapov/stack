@@ -15,6 +15,8 @@ int main (int argc, char** argv)
 
     int err = 0;
     printf ("%d\n", StackTop (&st, &err));
+    
+    StackDtor (&st);
 
     return 0;
 }

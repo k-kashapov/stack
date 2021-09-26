@@ -117,7 +117,7 @@ int StackPop (stack_t* stk)
     return 0;
 }
 
-type_t StackTop (stack_t* stk, int *err = NULL)
+type_t StackTop (stack_t* stk, int *err)
 {                  
     if (err)
     {
