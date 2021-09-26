@@ -1,71 +1,143 @@
 #include "Stack.h"
 
-const int BUFFER_INIT_SIZE = 10;
+const int BUFFER_INIT_SIZE = 1;
 
 const int MEMORY_ALLOC_ERR = -1;
+const int ZERO_ELEMENT_POP = -2;
 
-stack *createStack ()
-{
-    type_t *buffer = (type_t *) calloc (BUFFER_INIT_SIZE, sizeof(type_t));
-    assert (buffer);
+const int RESIZE_UP = 1;
+const int RESIZE_DOWN = -1;
 
-    stack *stack_ptr = (stack *) calloc (1, sizeof (stack));
-    stack new_stack; 
-    new_stack.buffer = buffer;
-    new_stack.elements_num = 0;
-    new_stack.buff_len = BUFFER_INIT_SIZE;
-    *stack_ptr = new_stack;
-    
-    return stack_ptr;
-}
+const int ERR_PTR = 0x42;
 
-int push (stack* dest, type_t value)
+int StackInit (stack_t *stk, int init_capacity)
 {   
-    if (dest->elements_num >= dest->buff_len)
+    stk->buffer = NULL;
+    
+    if (init_capacity > 0)
     {
-        type_t *tmp_buff = (type_t *) realloc (dest->buffer, (dest->buff_len + BUFFER_INIT_SIZE) * sizeof (type_t));
-        if (!tmp_buff)
-        {
-            printf ("ERROR: can't allocate memory");
-            return MEMORY_ALLOC_ERR;
-        }
-        dest->buffer = tmp_buff;
-        dest->buff_len += BUFFER_INIT_SIZE;
+        type_t *buffer = (type_t *) calloc (init_capacity, sizeof(type_t));
+        assert (buffer);
+
+        stk->buffer = buffer;
+        stk->size = init_capacity;
     }
-
-    assert (dest->buffer);
-    *(dest->buffer + dest->elements_num) = value;
-    (dest->elements_num)++;
-
+    
+    stk->capacity = 0;
+    stk->size = 0;
+    
     return 0;
 }
 
-int pop (stack* dest)
+int StackDtor (stack_t *stk)
+{   
+    free (stk->buffer);
+    
+    stk->buffer = (type_t *)0xEE;
+    
+    stk->capacity = 0;
+    stk->size = 0;
+    
+    return 0;
+}
+
+int StackResize (stack_t *stk, int direction)
 {
-    if (dest->elements_num < 1)
+    if (stk->size == 0)
     {
-        printf ("ERROR: 0 elements in stack");
+        type_t *buffer = (type_t *) calloc (BUFFER_INIT_SIZE, sizeof(type_t));
+        assert (buffer);
+
+        stk->buffer = buffer;
+        stk->size = BUFFER_INIT_SIZE;
+
+        return 0;
+    }
+    
+    type_t *buff = NULL;
+
+    if (direction > 0)
+    {
+        buff = (type_t *) realloc (stk->buffer, (stk->size * 2) * sizeof (type_t)); 
+    }
+    else
+    {
+        buff = (type_t *) realloc (stk->buffer, (stk->size / 2) * sizeof (type_t));
+    }
+
+    if (!buff)
+    {
+        printf ("\nERROR: can't allocate memory\n\n");
         return MEMORY_ALLOC_ERR;
     }
-    
-    *(dest->buffer + dest->elements_num - 1) = 0;
-    dest->elements_num--;
-    
+
+    stk->buffer = buff;
+    if (direction > 0)
+    {
+        stk->size *= 2;
+    }
+    else
+    {
+        stk->size /= 2;
+    }
+
     return 0;
 }
 
-type_t top (stack* dest)
-{                  
-    if (dest->elements_num < 1)
+int StackPush (stack_t* stk, type_t value)
+{   
+    if (stk->capacity >= stk->size)
     {
-        printf ("ERROR: 0 elements in stack");
-        return *dest->buffer;
+        StackResize (stk, RESIZE_UP);  
     }
 
-    type_t copy = *(dest->buffer + dest->elements_num - 1);
+    assert (stk->buffer);
+    *(stk->buffer + stk->capacity) = value;
+    (stk->capacity)++;
 
-    *(dest->buffer + dest->elements_num - 1) = 0;
-    dest->elements_num--;
+    return 0;
+}
+
+int StackPop (stack_t* stk)
+{
+    if (stk->capacity < 1)
+    {
+        printf ("\nERROR: 0 elements in stack\n\n");
+        return ZERO_ELEMENT_POP;
+    }
+    
+    *(stk->buffer + stk->capacity - 1) = 0;
+    stk->capacity--;
+    
+    if (stk->capacity <= stk->size / 4)
+    {
+        StackResize (stk, RESIZE_DOWN);
+    }
+
+    return 0;
+}
+
+type_t StackTop (stack_t* stk, int *err = NULL)
+{                  
+    if (err)
+    {
+        if (stk->capacity < 1)
+        {
+            printf ("\nERROR: 0 elements in stack\n\n");
+            *err = ZERO_ELEMENT_POP;
+            return ZERO_ELEMENT_POP;
+        }
+    }
+
+    type_t copy = *(stk->buffer + stk->capacity - 1);
+
+    *(stk->buffer + stk->capacity - 1) = 0;
+    stk->capacity--;
+
+    if (stk->capacity <= stk->size / 4)
+    {
+        StackResize (stk, RESIZE_DOWN);
+    }
 
     return copy;
 }

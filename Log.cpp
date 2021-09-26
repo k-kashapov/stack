@@ -1,13 +1,13 @@
 #include "Log.h"
 
 // TODO log files
-FILE *open_log ()
-{
-    FILE* log_file = fopen ("log.txt", "wt");
-    assert (log_file);
-    
-    return log_file;
-}
+//FILE *open_log ()
+//{
+//    
+//    assert (log_file);
+//    
+//    return log_file;
+//}
 
 int print_to_log (FILE *log_file, const char *msg)
 {

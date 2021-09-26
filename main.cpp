@@ -1,16 +1,20 @@
 #include "Stack.h"
 
 int main (int argc, char** argv)
-{ 
-    stack *st = createStack();
+{  
+    stack_t st;
+    StackInit(&st);
 
-    push (st, 6);
-    push (st, 3);
-    push (st, 3);
+    StackPush (&st, 6);
+    StackPush (&st, 6);
+    StackPush (&st, 6);
 
-    pop(st);
+    StackPop(&st);
+    StackPop(&st);
+    StackPop(&st);
 
-    printf ("%d\n", top (st));
+    int err = 0;
+    printf ("%d\n", StackTop (&st, &err));
 
     return 0;
 }
