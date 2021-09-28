@@ -30,5 +30,7 @@ int main (int argc, char** argv)
 
     StackPush (&st, 7);
 
+    close_log ();
+
     return 0;
 }

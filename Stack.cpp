@@ -32,6 +32,8 @@ ErrorCodes StackInit_d (stack_t *stk, const char *file_name, const char *func_na
         stk->line = line;
     }
 
+    STACK_OK (stk);
+
     return OK;
 }
 
@@ -75,6 +77,8 @@ ErrorCodes StackError (stack_t *stk)
          
 ErrorCodes StackResize (stack_t *stk, ResizeDir direction)
 {
+    STACK_OK (stk);
+
     if (stk->capacity == 0)
     {
         type_t *buffer = (type_t *) calloc (BUFFER_INIT_SIZE, sizeof(type_t));
@@ -128,7 +132,7 @@ ErrorCodes StackPush (stack_t* stk, type_t value)
     assert (stk->buffer);
     stk->buffer[stk->size++] = value;
 
-    StackError (stk);
+    STACK_OK (stk);
     return OK;
 }
 
@@ -155,7 +159,7 @@ ErrorCodes StackPop (stack_t* stk)
 
 type_t StackTop (stack_t* stk, int *err)
 {                  
-    StackError (stk);
+    STACK_OK (stk);
     if (err)
     {
         if (stk->size < 1)
