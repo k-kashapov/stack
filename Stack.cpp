@@ -32,8 +32,6 @@ ErrorCodes StackInit_d (stack_t *stk, const char *file_name, const char *func_na
         stk->line = line;
     }
 
-    STACK_OK (stk);
-
     return OK;
 }
 

@@ -28,9 +28,7 @@ int main (int argc, char** argv)
 
     StackDtor (&st);
 
-    StackPush (&st, 7);
-
-    close_log ();
+    StackPush (&st, 7); // TODO this situation handling
 
     return 0;
 }
