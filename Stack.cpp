@@ -2,56 +2,78 @@
 
 const int BUFFER_INIT_SIZE = 1;
 
-const int MEMORY_ALLOC_ERR = -1;
-const int ZERO_ELEMENT_POP = -2;
+FILE* log_file = fopen ("log.html", "wt");
 
-const int RESIZE_UP = 1;
-const int RESIZE_DOWN = -1;
+const char *_type_name = "int";
 
 const int ERR_PTR = 0x42;
 
-int StackInit (stack_t *stk, int init_capacity)
+ErrorCodes StackInit_ (stack_t *stk)
 {   
     stk->buffer = NULL;
     
-    if (init_capacity > 0)
-    {
-        type_t *buffer = (type_t *) calloc (init_capacity, sizeof(type_t));
-        assert (buffer);
+    stk->capacity = 0;
+    stk->size = 0;
 
-        stk->buffer = buffer;
-        stk->size = init_capacity;
-    }
+    return OK;
+}
+
+ErrorCodes StackInit_d (stack_t *stk, const char *file_name, const char *func_name, const int line)
+{   
+    stk->buffer = NULL;
     
     stk->capacity = 0;
     stk->size = 0;
     
-    return 0;
+    if (file_name && func_name && line > 0)
+    {
+        stk->file = (char *)file_name;
+        stk->func = (char *)func_name;
+        stk->line = line;
+    }
+
+    return OK;
 }
 
-int StackDtor (stack_t *stk)
+ErrorCodes StackDtor (stack_t *stk)
 {   
+    STACK_OK (stk);
+    
     free (stk->buffer);
     
-    stk->buffer = (type_t *)0xEE;
+    stk->buffer = (type_t *)ERR_PTR;
     
     stk->capacity = 0;
     stk->size = 0;
     
-    return 0;
+    STACK_OK (stk);
+
+    return OK;
 }
 
-int StackValid (stack_t *stk)
+ErrorCodes StackError (stack_t *stk)
 {
-    if (stk->buffer == (type_t *)ERR_PTR || stk->capacity < 0 || stk->size < 0)
+    if (stk->buffer == (type_t *)ERR_PTR)
+    {
+        return BAD_PTR;
+    }
+    else if (stk->capacity < 0)
     {        
-        return 0;
+        return CAPACITY_UNDER_ZERO;
+    }
+    else if (stk->size < 0)
+    {        
+        return SIZE_UNDER_ZERO;
+    }
+    else if (stk->size > stk->capacity)
+    {        
+        return SIZE_OVER_CAPACITY;
     }
 
-    return 1;
+    return OK;
 }
          
-int StackResize (stack_t *stk, int direction)
+ErrorCodes StackResize (stack_t *stk, ResizeDir direction)
 {
     if (stk->capacity == 0)
     {
@@ -61,7 +83,7 @@ int StackResize (stack_t *stk, int direction)
         stk->buffer = buffer;
         stk->capacity = BUFFER_INIT_SIZE;
 
-        return 0;
+        return StackError (stk);
     }
     
     type_t *buff = NULL;
@@ -77,8 +99,8 @@ int StackResize (stack_t *stk, int direction)
 
     if (!buff)
     {
-        printf ("\nERROR: can't allocate memory\n\n");
-        return MEMORY_ALLOC_ERR;
+        printf ("ERROR: can't allocate memory\n");
+        return BAD_PTR;
     }
 
     stk->buffer = buff;
@@ -91,11 +113,13 @@ int StackResize (stack_t *stk, int direction)
         stk->capacity /= 2;
     }
 
-    return 0;
+    return OK;
 }
 
-int StackPush (stack_t* stk, type_t value)
+ErrorCodes StackPush (stack_t* stk, type_t value)
 {   
+    STACK_OK (stk);
+
     if (stk->size >= stk->capacity)
     {
         StackResize (stk, RESIZE_UP);  
@@ -104,15 +128,18 @@ int StackPush (stack_t* stk, type_t value)
     assert (stk->buffer);
     stk->buffer[stk->size++] = value;
 
-    return 0;
+    StackError (stk);
+    return OK;
 }
 
-int StackPop (stack_t* stk)
+ErrorCodes StackPop (stack_t* stk)
 {
+    STACK_OK (stk);
+
     if (stk->size < 1)
     {
-        printf ("\nERROR: 0 elements in stack\n\n");
-        return ZERO_ELEMENT_POP;
+        printf ("ERROR: 0 elements in stack\n");
+        return ZERO_ELEM_POP;
     }
     
     stk->buffer[--stk->size] = 0;
@@ -122,18 +149,20 @@ int StackPop (stack_t* stk)
         StackResize (stk, RESIZE_DOWN);
     }
 
-    return 0;
+    STACK_OK (stk);
+    return OK;
 }
 
 type_t StackTop (stack_t* stk, int *err)
 {                  
+    StackError (stk);
     if (err)
     {
         if (stk->size < 1)
         {
-            printf ("\nERROR: 0 elements in stack\n\n");
-            *err = ZERO_ELEMENT_POP;
-            return ZERO_ELEMENT_POP;
+            printf ("ERROR: 0 elements in stack\n");
+            *err = ZERO_ELEM_POP;
+            return ZERO_ELEM_POP;
         }
     }
 
@@ -146,5 +175,73 @@ type_t StackTop (stack_t* stk, int *err)
         StackResize (stk, RESIZE_DOWN);
     }
 
+    STACK_OK (stk); 
     return copy;
 }
+
+int StackDump (stack_t *stk, ErrorCodes err, const char *called_from)
+{    
+    char err_msg[100] = {};
+    switch(err)
+    {
+    case OK:
+        strcpy (err_msg, "<em style = \"color : #00FA9A\">ok</em>");
+        break;
+    case BAD_PTR:
+        strcpy (err_msg, "<em style = \"color : red\">ERROR: BAD BUFFER POINTER</em>");
+        break;
+    case ZERO_ELEM_POP:
+        strcpy (err_msg, "<em style = \"color : red\">ERROR: zero element pop</em>");
+        break;
+    case CAPACITY_UNDER_ZERO:
+        strcpy (err_msg, "<em style = \"color : red\">ERROR: CAPACITY IS LESS THAN 0</em>");
+        break;
+    case SIZE_UNDER_ZERO:
+        strcpy (err_msg, "<em style = \"color : red\">ERROR: SIZE IS LESS THAN 0</em>");
+        break;
+    case SIZE_OVER_CAPACITY:
+        strcpy (err_msg, "<em style = \"color : red\">ERROR: CAPACITY IS LESS THAN SIZE</em>");
+        break;
+    default:
+        strcpy (err_msg, "<em style = \"color : red\">ERROR: UNKNOWN ERROR</em>");
+        break;
+    }
+
+    fprintf (log_file, "<pre>[%s] [%s] Stack <%s> [&%p] %s \"%s\" at %s at %s (%d); called from %s\n</pre>",\
+             __DATE__, __TIME__, _type_name, stk, err_msg, stk->name, stk->func, stk->file, stk->line, called_from);
+    
+    if (err != OK)
+    {
+        fprintf (log_file, "<pre>{\n\tcapacity = %d;\n\tsize = %d;\n\tbuffer <%s> [&%p]\n\t{\n",\
+                 stk->capacity, stk->size, _type_name, stk->buffer);                                                                                                             
+
+        if (err == BAD_PTR)
+        {
+            fprintf (log_file, "\n\t}\n}\n </pre>");
+            return 0;
+        }
+
+        for (int buff_iter = 0; buff_iter < stk->capacity; buff_iter++)
+        {
+            if (buff_iter < stk->size)
+            {
+                fprintf (log_file, "\t\t*[%d] = %d\n", buff_iter, stk->buffer[buff_iter]);
+            }
+            else
+            {
+                fprintf (log_file, "\t\t[%d] = %d\n", buff_iter, stk->buffer[buff_iter]);
+            }
+        }
+
+        fprintf (log_file, "\t}\n}</pre>");
+    }
+    return 0;
+}
+
+int close_log ()
+{
+    fclose (log_file);
+    
+    return 0;
+}
+
