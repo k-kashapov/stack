@@ -8,27 +8,27 @@ int main (int argc, char** argv)
     StackInit(st);
 
     StackPush (&st, 6);
-    StackPush (&st, 7);
-    StackPush (&st, 8);
-    StackPush (&st, 8);
-    StackPush (&st, 8);
-                        
-    StackPop (&st);
-    
-    st.size = -2;  // Wanted error
+    StackPush (&st, 6);
+    StackPush (&st, 6);
+    StackPush (&st, 6);
+    StackPush (&st, 6);
+    StackPush (&st, 6);
+    StackPush (&st, 6);
 
     StackPop (&st);
+    StackPop (&st);
+    StackPop (&st);
+    
+    st.size = st.capacity + 1;  // Wanted error
+
+    StackPush (&st, 7);
 
     int err = 0;
-    printf ("%d\n", StackTop (&st, &err));
-    
-    StackPop (&st);
-
-    printf ("%d\n", StackTop (&st, &err));
+    printf ("%d\n", StackPop (&st, &err));
 
     StackDtor (&st);
 
-    StackPush (&st, 7); // TODO this situation handling
+    close_log ();
 
     return 0;
 }

@@ -3,77 +3,135 @@
 const int BUFFER_INIT_SIZE = 1;
 
 FILE* log_file = fopen ("log.html", "wt");
-
 const char *_type_name = "int";
 
-const int ERR_PTR = 0x42;
+const int POISON = 0x42;
+uint64_t Stack_Err = 0;
 
-ErrorCodes StackInit_ (stack_t *stk)
+const int CANARY_VAL = 0xC0DEDEAD;
+
+uint64_t StackInit_ (stack_t *stk, const char *file_name, const char *func_name, const int line)
 {   
     stk->buffer = NULL;
     
     stk->capacity = 0;
     stk->size = 0;
 
+    #ifdef DEBUG_INFO
+        if (file_name && func_name && line > 0)
+        {
+            stk->file = file_name;
+            stk->func = func_name;
+            stk->line = line;
+        }
+    #endif 
+
+    #ifdef CANARY_PROTECTION
+        stk->canary_l = CANARY_VAL ^ (uint64_t) stk;
+        stk->canary_r = CANARY_VAL ^ (uint64_t) stk;
+    #endif 
+    
     return OK;
 }
 
-ErrorCodes StackInit_d (stack_t *stk, const char *file_name, const char *func_name, const int line)
-{   
-    stk->buffer = NULL;
-    
-    stk->capacity = 0;
-    stk->size = 0;
-    
-    if (file_name && func_name && line > 0)
-    {
-        stk->file = (char *)file_name;
-        stk->func = (char *)func_name;
-        stk->line = line;
-    }
-
-    return OK;
-}
-
-ErrorCodes StackDtor (stack_t *stk)
-{   
-    STACK_OK (stk);
-    
-    free (stk->buffer);
-    
-    stk->buffer = (type_t *)ERR_PTR;
-    
-    stk->capacity = 0;
-    stk->size = 0;
-    
-    STACK_OK (stk);
-
-    return OK;
-}
-
-ErrorCodes StackError (stack_t *stk)
+uint64_t StackError (stack_t *stk)
 {
-    if (stk->buffer == (type_t *)ERR_PTR)
+    uint64_t StkErrors = 0;
+    uint64_t canary_check = CANARY_VAL ^ (uint64_t) stk;
+
+    if (stk->buffer == (type_t *)POISON)
     {
-        return BAD_PTR;
+        StkErrors |= BAD_PTR;
     }
-    else if (stk->capacity < 0)
+    if (stk->capacity < 0)
     {        
-        return CAPACITY_UNDER_ZERO;
+        StkErrors |= CAPACITY_UNDER_ZERO;
     }
-    else if (stk->size < 0)
+    if (stk->size < 0)
     {        
-        return SIZE_UNDER_ZERO;
+        StkErrors |= SIZE_UNDER_ZERO;
     }
-    else if (stk->size > stk->capacity)
+    if (stk->size > stk->capacity)
     {        
-        return SIZE_OVER_CAPACITY;
+        StkErrors |= SIZE_OVER_CAPACITY;
     }
 
-    return OK;
+    #ifdef CANARY_PROTECTION
+        if (stk->canary_l != canary_check)
+        {        
+            StkErrors |= LEFT_CANARY_DEAD;
+        }                                   
+        if (stk->canary_r != canary_check)
+        {        
+            StkErrors |= RIGHT_CANARY_DEAD;
+        }
+    #endif
+
+    #ifdef EXPENSIVE_PROTECTION
+        for (int iter = stk->size; iter > 0 && iter < stk->capacity; iter++)
+        {
+            if (stk->buffer [iter] != POISON)
+            {
+                StkErrors |= NOT_POISONED_BEYOND_SIZE;
+                break;
+            }
+        }
+    #endif 
+
+
+    return StkErrors;
+}
+
+int StackDump (stack_t *stk, uint64_t err, const char *called_from, const int line_called_from)
+{    
+    const char *err_string = err ? "<em style = \"color : red\">ERROR</em>" : "<em style = \"color : #00FA9A\">ok</em>";
+    
+    fprintf (log_file, "<pre>[%s] [%s] Stack &#60%s&#62 [&%p] \"%s\" %s at %s at %s (%d); called from %s (%d)</pre>",\
+             __DATE__, __TIME__, _type_name, stk, stk->name, err_string, stk->func, stk->file, stk->line, called_from, line_called_from);
+
+    if (err)
+    {
+        PRINT_ERR (err, BAD_PTR);
+        PRINT_ERR (err, ZERO_ELEM_POP);
+        PRINT_ERR (err, CAPACITY_UNDER_ZERO);
+        PRINT_ERR (err, SIZE_UNDER_ZERO);
+        PRINT_ERR (err, SIZE_OVER_CAPACITY);
+        PRINT_ERR (err, LEFT_CANARY_DEAD);
+        PRINT_ERR (err, RIGHT_CANARY_DEAD);
+        PRINT_ERR (err, NOT_POISONED_BEYOND_SIZE);
+
+    }
+    
+    if (err)
+    {
+        fprintf (log_file, "<pre>{\n\tcapacity = %d;\n\tsize = %d;\n\tbuffer <%s> [&%p]\n\t{\n",\
+                 stk->capacity, stk->size, _type_name, stk->buffer);                                                                                                             
+
+        if (err == BAD_PTR)
+        {
+            fprintf (log_file, "\n\t}\n}\n </pre>");
+            return 0;
+        }
+
+        for (int buff_iter = 0; buff_iter < stk->capacity; buff_iter++)
+        {
+            const char *poison = stk->buffer[buff_iter] == POISON ? "POISON" : "";
+            if (buff_iter < stk->size)
+            {
+                fprintf (log_file, "\t\t*[%d] = %d %s\n", buff_iter, stk->buffer[buff_iter], poison);
+            }
+            else
+            {
+                fprintf (log_file, "\t\t [%d] = %d %s\n", buff_iter, stk->buffer[buff_iter], poison);
+            }
+        }
+
+        fprintf (log_file, "\t}\n}</pre>");
+    }
+    return 0;
 }
          
-ErrorCodes StackResize (stack_t *stk, ResizeDir direction)
+uint64_t StackResize (stack_t *stk, ResizeDir direction)
 {
     STACK_OK (stk);
 
@@ -109,16 +167,22 @@ ErrorCodes StackResize (stack_t *stk, ResizeDir direction)
     if (direction > 0)
     {
         stk->capacity *= 2;
+
+        for (int poison_iter = stk->size; poison_iter < stk->capacity; poison_iter++)
+        {
+            stk->buffer [poison_iter] = POISON;
+        }
     }
     else
     {
         stk->capacity /= 2;
     }
-
+    
+    STACK_OK (stk);
     return OK;
 }
 
-ErrorCodes StackPush (stack_t* stk, type_t value)
+uint64_t StackPush (stack_t* stk, type_t value)
 {   
     STACK_OK (stk);
 
@@ -134,43 +198,24 @@ ErrorCodes StackPush (stack_t* stk, type_t value)
     return OK;
 }
 
-ErrorCodes StackPop (stack_t* stk)
-{
-    STACK_OK (stk);
 
-    if (stk->size < 1)
-    {
-        printf ("ERROR: 0 elements in stack\n");
-        return ZERO_ELEM_POP;
-    }
-    
-    stk->buffer[--stk->size] = 0;
-    
-    if (stk->size <= stk->capacity / 4)
-    {
-        StackResize (stk, RESIZE_DOWN);
-    }
-
-    STACK_OK (stk);
-    return OK;
-}
-
-type_t StackTop (stack_t* stk, int *err)
+type_t StackPop (stack_t* stk, int *err_ptr)
 {                  
     STACK_OK (stk);
-    if (err)
+
+    if (Stack_Err)
     {
         if (stk->size < 1)
         {
             printf ("ERROR: 0 elements in stack\n");
-            *err = ZERO_ELEM_POP;
+            *err_ptr = ZERO_ELEM_POP;
             return ZERO_ELEM_POP;
         }
     }
 
     type_t copy = *(stk->buffer + stk->size - 1);
 
-    stk->buffer[--stk->size] = 0;
+    stk->buffer[--stk->size] = POISON;
 
     if (stk->size <= stk->capacity / 4)
     {
@@ -181,63 +226,24 @@ type_t StackTop (stack_t* stk, int *err)
     return copy;
 }
 
-int StackDump (stack_t *stk, ErrorCodes err, const char *called_from)
-{    
-    char err_msg[100] = {};
-    switch(err)
-    {
-    case OK:
-        strcpy (err_msg, "<em style = \"color : #00FA9A\">ok</em>");
-        break;
-    case BAD_PTR:
-        strcpy (err_msg, "<em style = \"color : red\">ERROR: BAD BUFFER POINTER</em>");
-        break;
-    case ZERO_ELEM_POP:
-        strcpy (err_msg, "<em style = \"color : red\">ERROR: zero element pop</em>");
-        break;
-    case CAPACITY_UNDER_ZERO:
-        strcpy (err_msg, "<em style = \"color : red\">ERROR: CAPACITY IS LESS THAN 0</em>");
-        break;
-    case SIZE_UNDER_ZERO:
-        strcpy (err_msg, "<em style = \"color : red\">ERROR: SIZE IS LESS THAN 0</em>");
-        break;
-    case SIZE_OVER_CAPACITY:
-        strcpy (err_msg, "<em style = \"color : red\">ERROR: CAPACITY IS LESS THAN SIZE</em>");
-        break;
-    default:
-        strcpy (err_msg, "<em style = \"color : red\">ERROR: UNKNOWN ERROR</em>");
-        break;
-    }
+uint64_t StackDtor (stack_t *stk)
+{   
+    Stack_Err = StackError (stk);                
+    StackDump (stk, Stack_Err, __FUNCSIG__, __LINE__);
 
-    fprintf (log_file, "<pre>[%s] [%s] Stack <%s> [&%p] %s \"%s\" at %s at %s (%d); called from %s\n</pre>",\
-             __DATE__, __TIME__, _type_name, stk, err_msg, stk->name, stk->func, stk->file, stk->line, called_from);
+    if (Stack_Err & BAD_PTR)
+        return Stack_Err;
     
-    if (err != OK)
-    {
-        fprintf (log_file, "<pre>{\n\tcapacity = %d;\n\tsize = %d;\n\tbuffer <%s> [&%p]\n\t{\n",\
-                 stk->capacity, stk->size, _type_name, stk->buffer);                                                                                                             
+    free (stk->buffer);
+    
+    stk->buffer = (type_t *)POISON;
+    
+    stk->capacity = -1;
+    stk->size = -1;
 
-        if (err == BAD_PTR)
-        {
-            fprintf (log_file, "\n\t}\n}\n </pre>");
-            return 0;
-        }
+    fprintf (log_file, "<em style = \"color : #00FA9A\">Stack Destructed</em>");
 
-        for (int buff_iter = 0; buff_iter < stk->capacity; buff_iter++)
-        {
-            if (buff_iter < stk->size)
-            {
-                fprintf (log_file, "\t\t*[%d] = %d\n", buff_iter, stk->buffer[buff_iter]);
-            }
-            else
-            {
-                fprintf (log_file, "\t\t[%d] = %d\n", buff_iter, stk->buffer[buff_iter]);
-            }
-        }
-
-        fprintf (log_file, "\t}\n}</pre>");
-    }
-    return 0;
+    return OK;
 }
 
 int close_log ()
