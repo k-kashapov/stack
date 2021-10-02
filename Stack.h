@@ -10,38 +10,48 @@
 #define DEBUG_INFO
 #define CANARY_PROTECTION
 #define EXPENSIVE_PROTECTION
+#define HASH_PROTECTION
 
 typedef int type_t;
 
-#define ToString(str) #str, str;
+#define TO_STRING(str) #str, str;
 
 #ifdef DEBUG_INFO
     #define StackInit(stk)                                   \
         StackInit_ (&stk, __FILE__, __FUNCSIG__, __LINE__); \
-        stk.name = ToString(stk);
-#endif
+        stk.name = TO_STRING(stk); 
 
-#ifndef DEBUG_INFO
-    #define StackInit(stk)                                  \
-        StackInit_ (&stk);   
-#endif // !DEBUG
-
-#ifdef DEBUG_INFO
     #define STACK_OK(stk)                      \
         Stack_Err = StackError (stk);                \
         StackDump (stk, Stack_Err, __FUNCSIG__, __LINE__);     \
-        if (Stack_Err) return Stack_Err;        
-#endif // DEBUG
+        if (Stack_Err) return Stack_Err;
+#else
+    #define StackInit(stk)\
+        StackInit_ (&stk);
 
-#ifndef DEBUG_INFO
     #define STACK_OK(stk)                \
         Stack_Err = StackError (stk);    \
-        if (Stack_Err) return Stack_Err;
-#endif // !DEBUG
+        if (Stack_Err) return Stack_Err;    
+#endif 
+
+
+#ifdef HASH_PROTECTION
+    #define COUNT_STACK_HASH(stk, res)\
+        int len = sizeof (*stk) - sizeof (stk->struct_hash) - sizeof (stk->data_hash);\
+        res = Hash (stk, len);
+                         
+    #define COUNT_DATA_HASH(stk, res)\
+        res = Hash (stk->buffer, stk->size * sizeof (type_t));
+#endif
 
 #define PRINT_ERR(err, flag) \
-        if (err & flag)     \
-            fprintf (log_file, "<p style = \"color : red\">ERROR: %s</p>", #flag);
+    if (err & flag)     \
+        fprintf (log_file, "<p style = \"color : red\">ERROR: %s</p>", #flag);
+
+#define REALLOC(ptr, init_len, new_len, ptr_type)\
+    ptr_type *buff = (ptr_type *) realloc (ptr, new_len);\
+    assert (buff);\
+    ptr = buff;            
 
 struct stack_t
 {
@@ -57,12 +67,18 @@ struct stack_t
         const char* name;
         const char* func;
         const char* file;
-        int line;
+        int         line;
     #endif
 
     #ifdef CANARY_PROTECTION
         uint64_t canary_r;
-    #endif 
+    #endif
+    
+    #ifdef HASH_PROTECTION
+        unsigned int struct_hash;
+        unsigned int data_hash;
+    #endif
+
 };
 
 enum ErrorCodes
@@ -76,14 +92,12 @@ enum ErrorCodes
     SIZE_OVER_CAPACITY = 0x20,
     LEFT_CANARY_DEAD = 0x40,
     RIGHT_CANARY_DEAD = 0x80,
-    NOT_POISONED_BEYOND_SIZE = 0x100,
+    LEFT_DATA_CANARY_DEAD = 0x100,
+    RIGHT_DATA_CANARY_DEAD = 0x200,
+    NOT_POISONED_BEYOND_SIZE = 0x400,
+    STACK_HASH_INVALID = 0x800,
+    DATA_HASH_INVALID = 0x1000,
 
-};
-
-enum ResizeDir
-{
-    RESIZE_UP = 1,
-    RESIZE_DOWN = -1,
 };
 
 //  Убирает предупреждение о функциях библиотеки stdlib.h в Visual Studio
@@ -93,7 +107,7 @@ int StackDump (stack_t *stk, uint64_t err, const char *called_from, const int li
 
 int close_log ();
 
-uint64_t StackInit_ (stack_t *stk);
+unsigned int Hash (void *stk, int len);
 
 uint64_t StackInit_ (stack_t *stk, const char *file_name = NULL, const char *func_name = NULL, const int line = -1);
 
