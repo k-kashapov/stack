@@ -14,12 +14,11 @@
 
 typedef int type_t;
 
-#define TO_STRING(str) #str, str;
+#define TO_STRING(str) #str
 
 #ifdef DEBUG_INFO
     #define StackInit(stk)                                   \
-        StackInit_ (&stk, __FILE__, __FUNCSIG__, __LINE__); \
-        stk.name = TO_STRING(stk); 
+        StackInit_ (&stk, __FILE__, __FUNCSIG__, __LINE__, #stk); 
 
     #define STACK_OK(stk)                      \
         Stack_Err = StackError (stk);                \
@@ -109,7 +108,7 @@ int close_log ();
 
 unsigned int Hash (void *stk, int len);
 
-uint64_t StackInit_ (stack_t *stk, const char *file_name = NULL, const char *func_name = NULL, const int line = -1);
+uint64_t StackInit_ (stack_t *stk, const char *file_name = NULL, const char *func_name = NULL, const int line = -1, const char *name = NULL);
 
 uint64_t StackDtor (stack_t *stk);
 

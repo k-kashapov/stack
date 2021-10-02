@@ -10,7 +10,7 @@ uint64_t Stack_Err = 0;
 
 const uint64_t CANARY_VAL = 0xC0DEDEADC0DEDEAD;
 
-uint64_t StackInit_ (stack_t *stk, const char *file_name, const char *func_name, const int line)
+uint64_t StackInit_ (stack_t *stk, const char *file_name, const char *func_name, const int line, const char *name)
 {   
     stk->buffer = NULL;
     
@@ -18,11 +18,12 @@ uint64_t StackInit_ (stack_t *stk, const char *file_name, const char *func_name,
     stk->size = 0;
 
     #ifdef DEBUG_INFO
-        if (file_name && func_name && line > 0)
+        if (file_name && func_name && line > 0 && name)
         {
             stk->file = file_name;
             stk->func = func_name;
             stk->line = line;
+            stk->name = name;
         }
     #endif 
 
@@ -124,8 +125,10 @@ int StackDump (stack_t *stk, uint64_t err, const char *called_from, const int li
 {    
     const char *err_string = err ? "<em style = \"color : red\">ERROR</em>" : "<em style = \"color : #00FA9A\">ok</em>";
     
-    fprintf (log_file, "<pre>[%s] [%s] Stack &#60%s&#62 [&%p] \"%s\" %s at %s at %s (%d); called from %s (%d)</pre>",\
-             __DATE__, __TIME__, _type_name, stk, stk->name, err_string, stk->func, stk->file, stk->line, called_from, line_called_from);
+    #ifdef DEBUG_INFO
+        fprintf (log_file, "<pre>[%s] [%s] Stack &#60%s&#62 [&%p] \"%s\" %s at %s at %s (%d); called from %s (%d)</pre>",\
+                 __DATE__, __TIME__, _type_name, stk, stk->name, err_string, stk->func, stk->file, stk->line, called_from, line_called_from);
+    #endif
 
     if (err)
     {
