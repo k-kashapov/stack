@@ -5,7 +5,7 @@ const int BUFFER_INIT_SIZE = 1;
 FILE* log_file = fopen ("log.html", "wt");
 const char *_type_name = "int";
 
-const int POISON = 0x42;
+const type_t POISON = 0x42;
 uint64_t Stack_Err = 0;
 
 const uint64_t CANARY_VAL = 0xC0DEDEADC0DEDEAD;
@@ -43,7 +43,10 @@ uint64_t StackInit_ (stack_t *stk, const char *file_name, const char *func_name,
 uint64_t StackError (stack_t *stk)
 {
     uint64_t StkErrors = 0;
-    uint64_t canary_check = CANARY_VAL ^ (uint64_t) stk;
+    
+    #ifdef CANARY_PROTECTION
+        uint64_t canary_check = CANARY_VAL ^ (uint64_t) stk;
+    #endif 
 
     if (stk->capacity < 0)
     {        
@@ -107,7 +110,7 @@ uint64_t StackError (stack_t *stk)
         }
     #endif
 
-    #ifdef EXPENSIVE_PROTECTION
+    #ifdef CHECK_POISON
         for (int iter = stk->size; iter > 0 && iter < stk->capacity; iter++)
         {
             if (stk->buffer [iter] != POISON)
@@ -121,12 +124,12 @@ uint64_t StackError (stack_t *stk)
     return StkErrors;
 }
 
-int StackDump (stack_t *stk, uint64_t err, const char *called_from, const int line_called_from)
+uint64_t StackDump (stack_t *stk, uint64_t err, const char *called_from, const int line_called_from)
 {    
     const char *err_string = err ? "<em style = \"color : red\">ERROR</em>" : "<em style = \"color : #00FA9A\">ok</em>";
     
     #ifdef DEBUG_INFO
-        fprintf (log_file, "<pre>[%s] [%s] Stack &#60%s&#62 [&%p] \"%s\" %s at %s at %s (%d); called from %s (%d)</pre>",\
+        fprintf (log_file, "<pre>[%s] [%s] Stack &#60%s&#62 [&%p] \"%s\" %s at %s at %s (%d); called from %s (%d)\n</pre>",\
                  __DATE__, __TIME__, _type_name, stk, stk->name, err_string, stk->func, stk->file, stk->line, called_from, line_called_from);
     #endif
 
@@ -202,25 +205,32 @@ uint64_t StackResize (stack_t *stk, long new_capacity)
 
     if (new_capacity <= 0) new_capacity = BUFFER_INIT_SIZE;
 
-    int buff_len = new_capacity * sizeof (type_t) + 2 * sizeof (CANARY_VAL);    
-    uint64_t canary = CANARY_VAL ^ (uint64_t) stk;
-    
-    if (stk->capacity == 0)
-    { 
+    #ifdef CANARY_PROTECTION
+        int buff_len = new_capacity * sizeof (type_t) + 2 * sizeof (CANARY_VAL);    
+        uint64_t canary = CANARY_VAL ^ (uint64_t) stk;
+
+        if (stk->capacity == 0)
+        { 
+            REALLOC (stk->buffer, stk->capacity, buff_len, type_t);
+        
+            *(uint64_t *)stk->buffer = canary;
+            stk->buffer = (type_t *)((uint64_t *)stk->buffer + 1);
+        }
+        else
+        {
+            uint64_t *tmp_buff = (uint64_t *) ((char *) stk->buffer - sizeof (CANARY_VAL)); 
+            REALLOC (tmp_buff, stk->capacity, buff_len, uint64_t);
+            stk->buffer = (type_t *)(tmp_buff + 1);
+        }
+
+        *(uint64_t *)(stk->buffer + new_capacity) = canary;
+    #else
+        int buff_len = new_capacity * sizeof (type_t);
+
         REALLOC (stk->buffer, stk->capacity, buff_len, type_t);
-        *(uint64_t *)stk->buffer = canary;
-        stk->buffer = (type_t *)((uint64_t *)stk->buffer + 1);
-    }
-    else
-    {
-        uint64_t *tmp_buff = (uint64_t*) ((char *) stk->buffer - sizeof (CANARY_VAL)); 
-        REALLOC (tmp_buff, stk->capacity, buff_len, uint64_t);
-        stk->buffer = (type_t *)(tmp_buff + 1);
-    }
+    #endif
 
     stk->capacity = new_capacity;
-
-    *(uint64_t *)(stk->buffer + stk->capacity) = canary;
 
     for (int iter = stk->size; iter < stk->capacity; iter++)
     {
@@ -242,7 +252,8 @@ uint64_t StackPush (stack_t* stk, type_t value)
 
     if (stk->size >= stk->capacity)
     {
-        StackResize (stk, stk->size * 2);  
+        uint64_t resize_error = StackResize (stk, stk->size * 2);
+        if (resize_error) return resize_error;
     }
 
     assert (stk->buffer);
@@ -257,11 +268,11 @@ uint64_t StackPush (stack_t* stk, type_t value)
     return OK;
 }
 
-type_t StackPop (stack_t* stk, int *err_ptr)
+type_t StackPop (stack_t* stk, uint64_t *err_ptr)
 {                  
     STACK_OK (stk);
 
-    if (Stack_Err)
+    if (err_ptr)
     {
         if (stk->size < 1)
         {
@@ -277,7 +288,12 @@ type_t StackPop (stack_t* stk, int *err_ptr)
 
     if (stk->size <= stk->capacity / 4)
     {
-        StackResize (stk, stk->size / 2);
+        uint64_t resize_error = StackResize (stk, stk->size / 2);
+        if (resize_error) 
+        {
+            if (err_ptr) *err_ptr = resize_error;
+            return -1;
+        }
     }
 
     #ifdef HASH_PROTECTION
@@ -287,6 +303,23 @@ type_t StackPop (stack_t* stk, int *err_ptr)
 
     STACK_OK (stk); 
     return copy;
+}
+
+type_t StackTop (stack_t *stk, uint64_t *err_ptr)
+{
+    STACK_OK (stk);
+    
+    if (err_ptr)
+    {
+        if (stk->size < 1)
+        {
+            printf ("ERROR: 0 elements in stack\n");
+            *err_ptr = ZERO_ELEM_POP;
+            return ZERO_ELEM_POP;
+        }
+    }
+    
+    return stk->buffer [stk->size - 1];
 }
 
 unsigned int Hash (void *stk, int len)
@@ -339,13 +372,13 @@ unsigned int Hash (void *stk, int len)
 
 uint64_t StackDtor (stack_t *stk)
 {   
-    Stack_Err = StackError (stk);                
-    StackDump (stk, Stack_Err, __FUNCSIG__, __LINE__);
+    STACK_OK (stk);
 
-    if (Stack_Err & BAD_PTR || !stk->buffer)
-        return Stack_Err;
-    
-    free ((uint64_t *)stk->buffer - 1);
+    #ifdef CANARY_PROTECTION
+        free ((uint64_t *)stk->buffer - 1);
+    #else
+        free (stk->buffer);
+    #endif
     
     stk->buffer = (type_t *)POISON;
     

@@ -12,7 +12,7 @@ int main (int argc, char** argv)
     StackPush (&st, 3);
     StackPush (&st, 1);    
     
-    st.size = -1; // Wanted error
+    //st.size = -1; // Wanted error
     
     StackPush (&st, -1);
     StackPush (&st, -18);
@@ -24,8 +24,10 @@ int main (int argc, char** argv)
 
     StackPush (&st, 1000-7);
 
-    int err = 0;
-    printf ("%d\n", StackPop (&st, &err));
+    uint64_t err = 0;
+    printf ("%d\n", StackTop (&st, &err));
+    printf ("%d\n", StackTop (&st, &err));
+    printf ("%d\n", StackTop (&st, &err));
 
     StackDtor (&st);
 

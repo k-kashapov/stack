@@ -7,10 +7,10 @@
 #include <string.h>
 #include <stdint.h>
 
-#define DEBUG_INFO
-#define CANARY_PROTECTION
-#define EXPENSIVE_PROTECTION
-#define HASH_PROTECTION
+//#define DEBUG_INFO
+//#define CANARY_PROTECTION
+//#define CHECK_POISON
+//#define HASH_PROTECTION
 
 typedef int type_t;
 
@@ -28,9 +28,7 @@ typedef int type_t;
     #define StackInit(stk)\
         StackInit_ (&stk);
 
-    #define STACK_OK(stk)                \
-        Stack_Err = StackError (stk);    \
-        if (Stack_Err) return Stack_Err;    
+    #define STACK_OK(stk) ;
 #endif 
 
 
@@ -63,10 +61,10 @@ struct stack_t
     int    size;
 
     #ifdef DEBUG_INFO
-        const char* name;
         const char* func;
         const char* file;
         int         line;
+        const char* name;
     #endif
 
     #ifdef CANARY_PROTECTION
@@ -102,7 +100,7 @@ enum ErrorCodes
 //  Убирает предупреждение о функциях библиотеки stdlib.h в Visual Studio
 #pragma warning(disable:4996)
 
-int StackDump (stack_t *stk, uint64_t err, const char *called_from, const int line_called_from);
+uint64_t StackDump (stack_t *stk, uint64_t err, const char *called_from, const int line_called_from);
 
 int close_log ();
 
@@ -116,4 +114,6 @@ uint64_t StackError (stack_t *stk);
 
 uint64_t StackPush (stack_t* stk, type_t value);   
 
-type_t StackPop (stack_t* stk, int *err = NULL);
+type_t StackPop (stack_t* stk, uint64_t *err = NULL);
+
+type_t StackTop (stack_t *stk, uint64_t *err_ptr);
