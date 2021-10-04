@@ -2,13 +2,17 @@
 
 const int BUFFER_INIT_SIZE = 1;
 
-FILE* log_file = fopen ("log.html", "wt");
-const char *_type_name = "int";
+FILE* log_file;
+#ifdef DEBUG_INFO
+    const char *_type_name = "int";
+#endif // DEBUG_INFO
+
+#ifdef CANARY_PROTECTION
+    const uint64_t CANARY_VAL = 0xC0DEDEADC0DEDEAD;
+#endif // CANARY_PROTECTION
 
 const type_t POISON = 0x42;
 uint64_t Stack_Err = 0;
-
-const uint64_t CANARY_VAL = 0xC0DEDEADC0DEDEAD;
 
 uint64_t StackInit_ (stack_t *stk, const char *file_name, const char *func_name, const int line, const char *name)
 {   
@@ -24,6 +28,12 @@ uint64_t StackInit_ (stack_t *stk, const char *file_name, const char *func_name,
             stk->func = func_name;
             stk->line = line;
             stk->name = name;
+
+            char log_name[50];
+            strcpy (log_name, name);
+            strcat (log_name, "_log.html");
+
+            log_file = fopen (log_name, "wt");
         }
     #endif 
 
@@ -126,76 +136,76 @@ uint64_t StackError (stack_t *stk)
 
 uint64_t StackDump (stack_t *stk, uint64_t err, const char *called_from, const int line_called_from)
 {    
-    const char *err_string = err ? "<em style = \"color : red\">ERROR</em>" : "<em style = \"color : #00FA9A\">ok</em>";
-    
     #ifdef DEBUG_INFO
+        if (!log_file) return -1;
+
+        const char *err_string = err ? "<em style = \"color : red\">ERROR</em>" : "<em style = \"color : #00FA9A\">ok</em>";
         fprintf (log_file, "<pre>[%s] [%s] Stack &#60%s&#62 [&%p] \"%s\" %s at %s at %s (%d); called from %s (%d)\n</pre>",\
-                 __DATE__, __TIME__, _type_name, stk, stk->name, err_string, stk->func, stk->file, stk->line, called_from, line_called_from);
+                     __DATE__, __TIME__, _type_name, stk, stk->name, err_string, stk->func, stk->file, stk->line, called_from, line_called_from);
+
+        if (err)
+        {
+            PRINT_ERR (err, BAD_PTR);
+            PRINT_ERR (err, ZERO_ELEM_POP);
+            PRINT_ERR (err, CAPACITY_UNDER_ZERO);
+            PRINT_ERR (err, SIZE_UNDER_ZERO);
+            PRINT_ERR (err, SIZE_OVER_CAPACITY);
+            PRINT_ERR (err, LEFT_CANARY_DEAD);
+            PRINT_ERR (err, RIGHT_CANARY_DEAD);
+            PRINT_ERR (err, LEFT_DATA_CANARY_DEAD);
+            PRINT_ERR (err, RIGHT_DATA_CANARY_DEAD);
+            PRINT_ERR (err, NOT_POISONED_BEYOND_SIZE);
+            PRINT_ERR (err, STACK_HASH_INVALID);
+            PRINT_ERR (err, DATA_HASH_INVALID);
+        }
+    
+        if (err)
+        {
+            fprintf (log_file, "<pre>{\n\tcapacity = %d;\n\tsize = %d;",\
+                     stk->capacity, stk->size);                                                                                                             
+
+            #ifdef CANARY_PROTECTION
+                fprintf (log_file, "\n\tcanary_l = %llx;\n\tcanary_r = %llx;", stk->canary_l ^ (uint64_t)stk, stk->canary_r ^ (uint64_t)stk);
+            #endif
+                           
+            #ifdef HASH_PROTECTION
+                unsigned int stk_hash = 0;
+                COUNT_STACK_HASH (stk, stk_hash);
+            
+                unsigned int data_hash = 0;
+                COUNT_DATA_HASH (stk, data_hash);                
+                fprintf (log_file, "\n\tstruct_hash = %u;\n\texpected struct_hash = %u;\n\tdata_hash = %u;\n\texpected data_hash = %u;", stk_hash, stk->struct_hash, data_hash, stk->data_hash);
+            #endif
+
+            fprintf (log_file, "\n\tbuffer &#60%s&#62 [&%p]\n\t{\n", _type_name, stk->buffer);
+
+            if (err & BAD_PTR || !stk->buffer)
+            {
+                fprintf (log_file, "\n\t}\n}\n </pre>");
+                return err;
+            }
+
+            #ifdef CANARY_PROTECTION
+                fprintf (log_file, "\t\t left_canary = %llx\n", *((uint64_t *)stk->buffer - 1) ^ (uint64_t) stk);
+            #endif
+
+            for (int buff_iter = 0; buff_iter < stk->capacity; buff_iter++)
+            {
+                const char *poison = stk->buffer[buff_iter] == POISON ? "POISON" : "";
+                if (buff_iter < stk->size)
+                {
+                    fprintf (log_file, "\t\t*[%d] = %d\n", buff_iter, stk->buffer[buff_iter]);
+                }
+                else
+                {
+                    fprintf (log_file, "\t\t [%d] = %d %s\n", buff_iter, stk->buffer[buff_iter], poison);
+                }
+            }
+        
+            fprintf (log_file, "\t\t right_canary = %llx\n\t}\n}</pre>", *((uint64_t *)(stk->buffer + stk->capacity)) ^ (uint64_t) stk);
+        }
     #endif
 
-    if (err)
-    {
-        PRINT_ERR (err, BAD_PTR);
-        PRINT_ERR (err, ZERO_ELEM_POP);
-        PRINT_ERR (err, CAPACITY_UNDER_ZERO);
-        PRINT_ERR (err, SIZE_UNDER_ZERO);
-        PRINT_ERR (err, SIZE_OVER_CAPACITY);
-        PRINT_ERR (err, LEFT_CANARY_DEAD);
-        PRINT_ERR (err, RIGHT_CANARY_DEAD);
-        PRINT_ERR (err, LEFT_DATA_CANARY_DEAD);
-        PRINT_ERR (err, RIGHT_DATA_CANARY_DEAD);
-        PRINT_ERR (err, NOT_POISONED_BEYOND_SIZE);
-        PRINT_ERR (err, STACK_HASH_INVALID);
-        PRINT_ERR (err, DATA_HASH_INVALID);
-    }
-    
-    if (err)
-    {
-        fprintf (log_file, "<pre>{\n\tcapacity = %d;\n\tsize = %d;",\
-                 stk->capacity, stk->size);                                                                                                             
-
-        #ifdef CANARY_PROTECTION
-            fprintf (log_file, "\n\tcanary_l = %llx;\n\tcanary_r = %llx;", stk->canary_l ^ (uint64_t)stk, stk->canary_r ^ (uint64_t)stk);
-        #endif
-                           
-        #ifdef HASH_PROTECTION
-            unsigned int stk_hash = 0;
-            COUNT_STACK_HASH (stk, stk_hash);
-            
-            unsigned int data_hash = 0;
-            COUNT_DATA_HASH (stk, data_hash);                
-            fprintf (log_file, "\n\tstruct_hash = %u;\n\texpected struct_hash = %u;\n\tdata_hash = %u;\n\texpected data_hash = %u;", stk_hash, stk->struct_hash, data_hash, stk->data_hash);
-        #endif
-
-        fprintf (log_file, "\n\tbuffer &#60%s&#62 [&%p]\n\t{\n", _type_name, stk->buffer);
-
-        if (err & BAD_PTR || !stk->buffer)
-        {
-            fprintf (log_file, "\n\t}\n}\n </pre>");
-            return err;
-        }
-
-        #ifdef CANARY_PROTECTION
-            fprintf (log_file, "\t\t left_canary = %llx\n", *((uint64_t *)stk->buffer - 1) ^ (uint64_t) stk);
-        #endif
-
-        for (int buff_iter = 0; buff_iter < stk->capacity; buff_iter++)
-        {
-            const char *poison = stk->buffer[buff_iter] == POISON ? "POISON" : "";
-            if (buff_iter < stk->size)
-            {
-                fprintf (log_file, "\t\t*[%d] = %d\n", buff_iter, stk->buffer[buff_iter]);
-            }
-            else
-            {
-                fprintf (log_file, "\t\t [%d] = %d %s\n", buff_iter, stk->buffer[buff_iter], poison);
-            }
-        }
-        
-        fprintf (log_file, "\t\t right_canary = %llx\n", *((uint64_t *)(stk->buffer + stk->capacity)) ^ (uint64_t) stk);
-
-        fprintf (log_file, "\t}\n}</pre>");
-    }
     return 0;
 }
          
@@ -379,20 +389,24 @@ uint64_t StackDtor (stack_t *stk)
     #else
         free (stk->buffer);
     #endif
-    
+                
     stk->buffer = (type_t *)POISON;
     
     stk->capacity = -1;
     stk->size = -1;
 
-    fprintf (log_file, "<em style = \"color : #00FA9A\">Stack Destructed</em>");
+    #ifdef DEBUG_INFO
+        if (log_file) fprintf (log_file, "<em style = \"color : #00FA9A\">Stack Destructed</em>");
+    #endif // DEBUG_INFO
 
     return OK;
 }
 
 int close_log ()
 {
-    fclose (log_file);
+    #ifdef DEBUG_INFO
+        fclose (log_file);
+    #endif // DEBUG_INFO
     
     return 0;
 }

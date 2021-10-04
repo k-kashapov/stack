@@ -7,10 +7,10 @@
 #include <string.h>
 #include <stdint.h>
 
-//#define DEBUG_INFO
-//#define CANARY_PROTECTION
-//#define CHECK_POISON
-//#define HASH_PROTECTION
+#define DEBUG_INFO
+#define CANARY_PROTECTION
+#define CHECK_POISON
+#define HASH_PROTECTION
 
 typedef int type_t;
 

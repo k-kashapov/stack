@@ -3,7 +3,7 @@
 extern const char *_type_name;
 
 int main (int argc, char** argv)
-{  
+{                              
     stack_t st = {};
     StackInit(st);
 
@@ -22,7 +22,7 @@ int main (int argc, char** argv)
     StackPop (&st);
     StackPop (&st);
 
-    StackPush (&st, 1000-7);
+    StackPush (&st, 1000-3);
 
     uint64_t err = 0;
     printf ("%d\n", StackTop (&st, &err));
