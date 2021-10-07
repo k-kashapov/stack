@@ -12,6 +12,10 @@
 #define CHECK_POISON
 #define HASH_PROTECTION
 
+#ifdef DEBUG_INFO
+    #define MAX_INFO
+#endif // DEBUG_INFO
+
 typedef int type_t;
 
 #define TO_STRING(str) #str

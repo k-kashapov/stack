@@ -1,186 +1,716 @@
-<pre>[Oct  3 2021] [00:41:05] Stack &#60int&#62 [&0000005538B1F9F0] "st" <em style = "color : #00FA9A">ok</em> at int __cdecl main(int,char **) at E:\Work\Stack\Stack\main.cpp (8); called from unsigned __int64 __cdecl StackPush(struct stack_t *,int) (241)
-</pre><pre>[Oct  3 2021] [00:41:05] Stack &#60int&#62 [&0000005538B1F9F0] "st" <em style = "color : #00FA9A">ok</em> at int __cdecl main(int,char **) at E:\Work\Stack\Stack\main.cpp (8); called from unsigned __int64 __cdecl StackResize(struct stack_t *,long) (201)
-</pre><pre>[Oct  3 2021] [00:41:05] Stack &#60int&#62 [&0000005538B1F9F0] "st" <em style = "color : #00FA9A">ok</em> at int __cdecl main(int,char **) at E:\Work\Stack\Stack\main.cpp (8); called from unsigned __int64 __cdecl StackResize(struct stack_t *,long) (235)
-</pre><pre>[Oct  3 2021] [00:41:05] Stack &#60int&#62 [&0000005538B1F9F0] "st" <em style = "color : #00FA9A">ok</em> at int __cdecl main(int,char **) at E:\Work\Stack\Stack\main.cpp (8); called from unsigned __int64 __cdecl StackPush(struct stack_t *,int) (256)
-</pre><pre>[Oct  3 2021] [00:41:05] Stack &#60int&#62 [&0000005538B1F9F0] "st" <em style = "color : #00FA9A">ok</em> at int __cdecl main(int,char **) at E:\Work\Stack\Stack\main.cpp (8); called from unsigned __int64 __cdecl StackPush(struct stack_t *,int) (241)
-</pre><pre>[Oct  3 2021] [00:41:05] Stack &#60int&#62 [&0000005538B1F9F0] "st" <em style = "color : #00FA9A">ok</em> at int __cdecl main(int,char **) at E:\Work\Stack\Stack\main.cpp (8); called from unsigned __int64 __cdecl StackResize(struct stack_t *,long) (201)
-</pre><pre>[Oct  3 2021] [00:41:05] Stack &#60int&#62 [&0000005538B1F9F0] "st" <em style = "color : #00FA9A">ok</em> at int __cdecl main(int,char **) at E:\Work\Stack\Stack\main.cpp (8); called from unsigned __int64 __cdecl StackResize(struct stack_t *,long) (235)
-</pre><pre>[Oct  3 2021] [00:41:05] Stack &#60int&#62 [&0000005538B1F9F0] "st" <em style = "color : #00FA9A">ok</em> at int __cdecl main(int,char **) at E:\Work\Stack\Stack\main.cpp (8); called from unsigned __int64 __cdecl StackPush(struct stack_t *,int) (256)
-</pre><pre>[Oct  3 2021] [00:41:05] Stack &#60int&#62 [&0000005538B1F9F0] "st" <em style = "color : #00FA9A">ok</em> at int __cdecl main(int,char **) at E:\Work\Stack\Stack\main.cpp (8); called from unsigned __int64 __cdecl StackPush(struct stack_t *,int) (241)
-</pre><pre>[Oct  3 2021] [00:41:05] Stack &#60int&#62 [&0000005538B1F9F0] "st" <em style = "color : #00FA9A">ok</em> at int __cdecl main(int,char **) at E:\Work\Stack\Stack\main.cpp (8); called from unsigned __int64 __cdecl StackResize(struct stack_t *,long) (201)
-</pre><pre>[Oct  3 2021] [00:41:05] Stack &#60int&#62 [&0000005538B1F9F0] "st" <em style = "color : #00FA9A">ok</em> at int __cdecl main(int,char **) at E:\Work\Stack\Stack\main.cpp (8); called from unsigned __int64 __cdecl StackResize(struct stack_t *,long) (235)
-</pre><pre>[Oct  3 2021] [00:41:05] Stack &#60int&#62 [&0000005538B1F9F0] "st" <em style = "color : #00FA9A">ok</em> at int __cdecl main(int,char **) at E:\Work\Stack\Stack\main.cpp (8); called from unsigned __int64 __cdecl StackPush(struct stack_t *,int) (256)
-</pre><pre>[Oct  3 2021] [00:41:05] Stack &#60int&#62 [&0000005538B1F9F0] "st" <em style = "color : #00FA9A">ok</em> at int __cdecl main(int,char **) at E:\Work\Stack\Stack\main.cpp (8); called from unsigned __int64 __cdecl StackPush(struct stack_t *,int) (241)
-</pre><pre>[Oct  3 2021] [00:41:05] Stack &#60int&#62 [&0000005538B1F9F0] "st" <em style = "color : #00FA9A">ok</em> at int __cdecl main(int,char **) at E:\Work\Stack\Stack\main.cpp (8); called from unsigned __int64 __cdecl StackPush(struct stack_t *,int) (256)
-</pre><pre>[Oct  3 2021] [00:41:05] Stack &#60int&#62 [&0000005538B1F9F0] "st" <em style = "color : red">ERROR</em> at int __cdecl main(int,char **) at E:\Work\Stack\Stack\main.cpp (8); called from unsigned __int64 __cdecl StackPush(struct stack_t *,int) (241)
-</pre><p style = "color : red">ERROR: SIZE_UNDER_ZERO</p><p style = "color : red">ERROR: STACK_HASH_INVALID</p><p style = "color : red">ERROR: DATA_HASH_INVALID</p><pre>{
-	capacity = 4;
-	size = -1;
+<pre>[Oct  7 2021] [03:09:02] Stack &#60int&#62 [&00000096BCCFF710] "st" <em style = "color : #00FA9A">ok</em> at int __cdecl main(int,char **) at E:\Work\Stack\Stack\main.cpp (8); called from unsigned __int64 __cdecl StackInit_(struct stack_t *,const char *,const char *,const int,const char *) (46)
+</pre><pre>{
+	capacity = 0;
+	size = 0;
 	canary_l = c0dedeadc0dedead;
 	canary_r = c0dedeadc0dedead;
-	struct_hash = 1695521524;
-	expected struct_hash = 1522118769;
-	data_hash = 3335270692;
-	expected data_hash = 1856087769;
-	buffer &#60int&#62 [&0000019FD5DBCA48]
+	struct_hash = 4135635920;
+	expected struct_hash = 4135635920;
+	data_hash = 0;
+	expected data_hash = 0;
+	buffer &#60int&#62 [&0000000000000000]
+	{
+
+	}
+}
+ </pre><pre>[Oct  7 2021] [03:09:02] Stack &#60int&#62 [&00000096BCCFF710] "st" <em style = "color : #00FA9A">ok</em> at int __cdecl main(int,char **) at E:\Work\Stack\Stack\main.cpp (8); called from unsigned __int64 __cdecl StackPush(struct stack_t *,int) (262)
+</pre><pre>{
+	capacity = 0;
+	size = 0;
+	canary_l = c0dedeadc0dedead;
+	canary_r = c0dedeadc0dedead;
+	struct_hash = 4135635920;
+	expected struct_hash = 4135635920;
+	data_hash = 0;
+	expected data_hash = 0;
+	buffer &#60int&#62 [&0000000000000000]
+	{
+
+	}
+}
+ </pre><pre>[Oct  7 2021] [03:09:02] Stack &#60int&#62 [&00000096BCCFF710] "st" <em style = "color : #00FA9A">ok</em> at int __cdecl main(int,char **) at E:\Work\Stack\Stack\main.cpp (8); called from unsigned __int64 __cdecl StackResize(struct stack_t *,long) (215)
+</pre><pre>{
+	capacity = 0;
+	size = 0;
+	canary_l = c0dedeadc0dedead;
+	canary_r = c0dedeadc0dedead;
+	struct_hash = 4135635920;
+	expected struct_hash = 4135635920;
+	data_hash = 0;
+	expected data_hash = 0;
+	buffer &#60int&#62 [&0000000000000000]
+	{
+
+	}
+}
+ </pre><pre>[Oct  7 2021] [03:09:02] Stack &#60int&#62 [&00000096BCCFF710] "st" <em style = "color : #00FA9A">ok</em> at int __cdecl main(int,char **) at E:\Work\Stack\Stack\main.cpp (8); called from unsigned __int64 __cdecl StackResize(struct stack_t *,long) (256)
+</pre><pre>{
+	capacity = 1;
+	size = 0;
+	canary_l = c0dedeadc0dedead;
+	canary_r = c0dedeadc0dedead;
+	struct_hash = 3807475980;
+	expected struct_hash = 3807475980;
+	data_hash = 0;
+	expected data_hash = 0;
+	buffer &#60int&#62 [&0000029416FCDFD8]
 	{
 		 left_canary = c0dedeadc0dedead
-		 [0] = 6 
-		 [1] = 5 
-		 [2] = 3 
-		 [3] = 1 
+		 [0] = 66 POISON
 		 right_canary = c0dedeadc0dedead
 	}
-}</pre><pre>[Oct  3 2021] [00:41:05] Stack &#60int&#62 [&0000005538B1F9F0] "st" <em style = "color : red">ERROR</em> at int __cdecl main(int,char **) at E:\Work\Stack\Stack\main.cpp (8); called from unsigned __int64 __cdecl StackPush(struct stack_t *,int) (241)
-</pre><p style = "color : red">ERROR: SIZE_UNDER_ZERO</p><p style = "color : red">ERROR: STACK_HASH_INVALID</p><p style = "color : red">ERROR: DATA_HASH_INVALID</p><pre>{
-	capacity = 4;
-	size = -1;
+}</pre><pre>[Oct  7 2021] [03:09:02] Stack &#60int&#62 [&00000096BCCFF710] "st" <em style = "color : #00FA9A">ok</em> at int __cdecl main(int,char **) at E:\Work\Stack\Stack\main.cpp (8); called from unsigned __int64 __cdecl StackPush(struct stack_t *,int) (278)
+</pre><pre>{
+	capacity = 1;
+	size = 1;
 	canary_l = c0dedeadc0dedead;
 	canary_r = c0dedeadc0dedead;
-	struct_hash = 1695521524;
-	expected struct_hash = 1522118769;
-	data_hash = 3335270692;
-	expected data_hash = 1856087769;
-	buffer &#60int&#62 [&0000019FD5DBCA48]
+	struct_hash = 2614959944;
+	expected struct_hash = 2614959944;
+	data_hash = 2641212525;
+	expected data_hash = 2641212525;
+	buffer &#60int&#62 [&0000029416FCDFD8]
 	{
 		 left_canary = c0dedeadc0dedead
-		 [0] = 6 
-		 [1] = 5 
-		 [2] = 3 
-		 [3] = 1 
+		*[0] = 6
 		 right_canary = c0dedeadc0dedead
 	}
-}</pre><pre>[Oct  3 2021] [00:41:05] Stack &#60int&#62 [&0000005538B1F9F0] "st" <em style = "color : red">ERROR</em> at int __cdecl main(int,char **) at E:\Work\Stack\Stack\main.cpp (8); called from unsigned __int64 __cdecl StackPush(struct stack_t *,int) (241)
-</pre><p style = "color : red">ERROR: SIZE_UNDER_ZERO</p><p style = "color : red">ERROR: STACK_HASH_INVALID</p><p style = "color : red">ERROR: DATA_HASH_INVALID</p><pre>{
-	capacity = 4;
-	size = -1;
+}</pre><pre>[Oct  7 2021] [03:09:02] Stack &#60int&#62 [&00000096BCCFF710] "st" <em style = "color : #00FA9A">ok</em> at int __cdecl main(int,char **) at E:\Work\Stack\Stack\main.cpp (8); called from unsigned __int64 __cdecl StackPush(struct stack_t *,int) (262)
+</pre><pre>{
+	capacity = 1;
+	size = 1;
 	canary_l = c0dedeadc0dedead;
 	canary_r = c0dedeadc0dedead;
-	struct_hash = 1695521524;
-	expected struct_hash = 1522118769;
-	data_hash = 3335270692;
-	expected data_hash = 1856087769;
-	buffer &#60int&#62 [&0000019FD5DBCA48]
+	struct_hash = 2614959944;
+	expected struct_hash = 2614959944;
+	data_hash = 2641212525;
+	expected data_hash = 2641212525;
+	buffer &#60int&#62 [&0000029416FCDFD8]
 	{
 		 left_canary = c0dedeadc0dedead
-		 [0] = 6 
-		 [1] = 5 
-		 [2] = 3 
-		 [3] = 1 
+		*[0] = 6
 		 right_canary = c0dedeadc0dedead
 	}
-}</pre><pre>[Oct  3 2021] [00:41:05] Stack &#60int&#62 [&0000005538B1F9F0] "st" <em style = "color : red">ERROR</em> at int __cdecl main(int,char **) at E:\Work\Stack\Stack\main.cpp (8); called from int __cdecl StackPop(struct stack_t *,int *) (262)
-</pre><p style = "color : red">ERROR: SIZE_UNDER_ZERO</p><p style = "color : red">ERROR: STACK_HASH_INVALID</p><p style = "color : red">ERROR: DATA_HASH_INVALID</p><pre>{
-	capacity = 4;
-	size = -1;
+}</pre><pre>[Oct  7 2021] [03:09:02] Stack &#60int&#62 [&00000096BCCFF710] "st" <em style = "color : #00FA9A">ok</em> at int __cdecl main(int,char **) at E:\Work\Stack\Stack\main.cpp (8); called from unsigned __int64 __cdecl StackResize(struct stack_t *,long) (215)
+</pre><pre>{
+	capacity = 1;
+	size = 1;
 	canary_l = c0dedeadc0dedead;
 	canary_r = c0dedeadc0dedead;
-	struct_hash = 1695521524;
-	expected struct_hash = 1522118769;
-	data_hash = 3335270692;
-	expected data_hash = 1856087769;
-	buffer &#60int&#62 [&0000019FD5DBCA48]
+	struct_hash = 2614959944;
+	expected struct_hash = 2614959944;
+	data_hash = 2641212525;
+	expected data_hash = 2641212525;
+	buffer &#60int&#62 [&0000029416FCDFD8]
 	{
 		 left_canary = c0dedeadc0dedead
-		 [0] = 6 
-		 [1] = 5 
-		 [2] = 3 
-		 [3] = 1 
+		*[0] = 6
 		 right_canary = c0dedeadc0dedead
 	}
-}</pre><pre>[Oct  3 2021] [00:41:05] Stack &#60int&#62 [&0000005538B1F9F0] "st" <em style = "color : red">ERROR</em> at int __cdecl main(int,char **) at E:\Work\Stack\Stack\main.cpp (8); called from int __cdecl StackPop(struct stack_t *,int *) (262)
-</pre><p style = "color : red">ERROR: SIZE_UNDER_ZERO</p><p style = "color : red">ERROR: STACK_HASH_INVALID</p><p style = "color : red">ERROR: DATA_HASH_INVALID</p><pre>{
-	capacity = 4;
-	size = -1;
+}</pre><pre>[Oct  7 2021] [03:09:02] Stack &#60int&#62 [&00000096BCCFF710] "st" <em style = "color : #00FA9A">ok</em> at int __cdecl main(int,char **) at E:\Work\Stack\Stack\main.cpp (8); called from unsigned __int64 __cdecl StackResize(struct stack_t *,long) (256)
+</pre><pre>{
+	capacity = 2;
+	size = 1;
 	canary_l = c0dedeadc0dedead;
 	canary_r = c0dedeadc0dedead;
-	struct_hash = 1695521524;
-	expected struct_hash = 1522118769;
-	data_hash = 3335270692;
-	expected data_hash = 1856087769;
-	buffer &#60int&#62 [&0000019FD5DBCA48]
+	struct_hash = 1181885538;
+	expected struct_hash = 1181885538;
+	data_hash = 2641212525;
+	expected data_hash = 2641212525;
+	buffer &#60int&#62 [&0000029416FC8798]
 	{
 		 left_canary = c0dedeadc0dedead
-		 [0] = 6 
-		 [1] = 5 
-		 [2] = 3 
-		 [3] = 1 
+		*[0] = 6
+		 [1] = 66 POISON
 		 right_canary = c0dedeadc0dedead
 	}
-}</pre><pre>[Oct  3 2021] [00:41:05] Stack &#60int&#62 [&0000005538B1F9F0] "st" <em style = "color : red">ERROR</em> at int __cdecl main(int,char **) at E:\Work\Stack\Stack\main.cpp (8); called from int __cdecl StackPop(struct stack_t *,int *) (262)
-</pre><p style = "color : red">ERROR: SIZE_UNDER_ZERO</p><p style = "color : red">ERROR: STACK_HASH_INVALID</p><p style = "color : red">ERROR: DATA_HASH_INVALID</p><pre>{
-	capacity = 4;
-	size = -1;
+}</pre><pre>[Oct  7 2021] [03:09:02] Stack &#60int&#62 [&00000096BCCFF710] "st" <em style = "color : #00FA9A">ok</em> at int __cdecl main(int,char **) at E:\Work\Stack\Stack\main.cpp (8); called from unsigned __int64 __cdecl StackPush(struct stack_t *,int) (278)
+</pre><pre>{
+	capacity = 2;
+	size = 2;
 	canary_l = c0dedeadc0dedead;
 	canary_r = c0dedeadc0dedead;
-	struct_hash = 1695521524;
-	expected struct_hash = 1522118769;
-	data_hash = 3335270692;
-	expected data_hash = 1856087769;
-	buffer &#60int&#62 [&0000019FD5DBCA48]
+	struct_hash = 3003097069;
+	expected struct_hash = 3003097069;
+	data_hash = 2080499365;
+	expected data_hash = 2080499365;
+	buffer &#60int&#62 [&0000029416FC8798]
 	{
 		 left_canary = c0dedeadc0dedead
-		 [0] = 6 
-		 [1] = 5 
-		 [2] = 3 
-		 [3] = 1 
+		*[0] = 6
+		*[1] = 5
 		 right_canary = c0dedeadc0dedead
 	}
-}</pre><pre>[Oct  3 2021] [00:41:05] Stack &#60int&#62 [&0000005538B1F9F0] "st" <em style = "color : red">ERROR</em> at int __cdecl main(int,char **) at E:\Work\Stack\Stack\main.cpp (8); called from unsigned __int64 __cdecl StackPush(struct stack_t *,int) (241)
-</pre><p style = "color : red">ERROR: SIZE_UNDER_ZERO</p><p style = "color : red">ERROR: STACK_HASH_INVALID</p><p style = "color : red">ERROR: DATA_HASH_INVALID</p><pre>{
-	capacity = 4;
-	size = -1;
+}</pre><pre>[Oct  7 2021] [03:09:02] Stack &#60int&#62 [&00000096BCCFF710] "st" <em style = "color : #00FA9A">ok</em> at int __cdecl main(int,char **) at E:\Work\Stack\Stack\main.cpp (8); called from unsigned __int64 __cdecl StackPush(struct stack_t *,int) (262)
+</pre><pre>{
+	capacity = 2;
+	size = 2;
 	canary_l = c0dedeadc0dedead;
 	canary_r = c0dedeadc0dedead;
-	struct_hash = 1695521524;
-	expected struct_hash = 1522118769;
-	data_hash = 3335270692;
-	expected data_hash = 1856087769;
-	buffer &#60int&#62 [&0000019FD5DBCA48]
+	struct_hash = 3003097069;
+	expected struct_hash = 3003097069;
+	data_hash = 2080499365;
+	expected data_hash = 2080499365;
+	buffer &#60int&#62 [&0000029416FC8798]
 	{
 		 left_canary = c0dedeadc0dedead
-		 [0] = 6 
-		 [1] = 5 
-		 [2] = 3 
-		 [3] = 1 
+		*[0] = 6
+		*[1] = 5
 		 right_canary = c0dedeadc0dedead
 	}
-}</pre><pre>[Oct  3 2021] [00:41:05] Stack &#60int&#62 [&0000005538B1F9F0] "st" <em style = "color : red">ERROR</em> at int __cdecl main(int,char **) at E:\Work\Stack\Stack\main.cpp (8); called from int __cdecl StackPop(struct stack_t *,int *) (262)
-</pre><p style = "color : red">ERROR: SIZE_UNDER_ZERO</p><p style = "color : red">ERROR: STACK_HASH_INVALID</p><p style = "color : red">ERROR: DATA_HASH_INVALID</p><pre>{
-	capacity = 4;
-	size = -1;
+}</pre><pre>[Oct  7 2021] [03:09:02] Stack &#60int&#62 [&00000096BCCFF710] "st" <em style = "color : #00FA9A">ok</em> at int __cdecl main(int,char **) at E:\Work\Stack\Stack\main.cpp (8); called from unsigned __int64 __cdecl StackResize(struct stack_t *,long) (215)
+</pre><pre>{
+	capacity = 2;
+	size = 2;
 	canary_l = c0dedeadc0dedead;
 	canary_r = c0dedeadc0dedead;
-	struct_hash = 1695521524;
-	expected struct_hash = 1522118769;
-	data_hash = 3335270692;
-	expected data_hash = 1856087769;
-	buffer &#60int&#62 [&0000019FD5DBCA48]
+	struct_hash = 3003097069;
+	expected struct_hash = 3003097069;
+	data_hash = 2080499365;
+	expected data_hash = 2080499365;
+	buffer &#60int&#62 [&0000029416FC8798]
 	{
 		 left_canary = c0dedeadc0dedead
-		 [0] = 6 
-		 [1] = 5 
-		 [2] = 3 
-		 [3] = 1 
+		*[0] = 6
+		*[1] = 5
 		 right_canary = c0dedeadc0dedead
 	}
-}</pre><pre>[Oct  3 2021] [00:41:05] Stack &#60int&#62 [&0000005538B1F9F0] "st" <em style = "color : red">ERROR</em> at int __cdecl main(int,char **) at E:\Work\Stack\Stack\main.cpp (8); called from unsigned __int64 __cdecl StackDtor(struct stack_t *) (343)
-</pre><p style = "color : red">ERROR: SIZE_UNDER_ZERO</p><p style = "color : red">ERROR: STACK_HASH_INVALID</p><p style = "color : red">ERROR: DATA_HASH_INVALID</p><pre>{
+}</pre><pre>[Oct  7 2021] [03:09:02] Stack &#60int&#62 [&00000096BCCFF710] "st" <em style = "color : #00FA9A">ok</em> at int __cdecl main(int,char **) at E:\Work\Stack\Stack\main.cpp (8); called from unsigned __int64 __cdecl StackResize(struct stack_t *,long) (256)
+</pre><pre>{
 	capacity = 4;
-	size = -1;
+	size = 2;
 	canary_l = c0dedeadc0dedead;
 	canary_r = c0dedeadc0dedead;
-	struct_hash = 1695521524;
-	expected struct_hash = 1522118769;
-	data_hash = 3335270692;
-	expected data_hash = 1856087769;
-	buffer &#60int&#62 [&0000019FD5DBCA48]
+	struct_hash = 2239048059;
+	expected struct_hash = 2239048059;
+	data_hash = 2080499365;
+	expected data_hash = 2080499365;
+	buffer &#60int&#62 [&0000029416FC8AF8]
 	{
 		 left_canary = c0dedeadc0dedead
-		 [0] = 6 
-		 [1] = 5 
-		 [2] = 3 
-		 [3] = 1 
+		*[0] = 6
+		*[1] = 5
+		 [2] = 66 POISON
+		 [3] = 66 POISON
+		 right_canary = c0dedeadc0dedead
+	}
+}</pre><pre>[Oct  7 2021] [03:09:02] Stack &#60int&#62 [&00000096BCCFF710] "st" <em style = "color : #00FA9A">ok</em> at int __cdecl main(int,char **) at E:\Work\Stack\Stack\main.cpp (8); called from unsigned __int64 __cdecl StackPush(struct stack_t *,int) (278)
+</pre><pre>{
+	capacity = 4;
+	size = 3;
+	canary_l = c0dedeadc0dedead;
+	canary_r = c0dedeadc0dedead;
+	struct_hash = 4015419946;
+	expected struct_hash = 4015419946;
+	data_hash = 2436353767;
+	expected data_hash = 2436353767;
+	buffer &#60int&#62 [&0000029416FC8AF8]
+	{
+		 left_canary = c0dedeadc0dedead
+		*[0] = 6
+		*[1] = 5
+		*[2] = -1
+		 [3] = 66 POISON
+		 right_canary = c0dedeadc0dedead
+	}
+}</pre><pre>[Oct  7 2021] [03:09:02] Stack &#60int&#62 [&00000096BCCFF710] "st" <em style = "color : #00FA9A">ok</em> at int __cdecl main(int,char **) at E:\Work\Stack\Stack\main.cpp (8); called from unsigned __int64 __cdecl StackPush(struct stack_t *,int) (262)
+</pre><pre>{
+	capacity = 4;
+	size = 3;
+	canary_l = c0dedeadc0dedead;
+	canary_r = c0dedeadc0dedead;
+	struct_hash = 4015419946;
+	expected struct_hash = 4015419946;
+	data_hash = 2436353767;
+	expected data_hash = 2436353767;
+	buffer &#60int&#62 [&0000029416FC8AF8]
+	{
+		 left_canary = c0dedeadc0dedead
+		*[0] = 6
+		*[1] = 5
+		*[2] = -1
+		 [3] = 66 POISON
+		 right_canary = c0dedeadc0dedead
+	}
+}</pre><pre>[Oct  7 2021] [03:09:02] Stack &#60int&#62 [&00000096BCCFF710] "st" <em style = "color : #00FA9A">ok</em> at int __cdecl main(int,char **) at E:\Work\Stack\Stack\main.cpp (8); called from unsigned __int64 __cdecl StackPush(struct stack_t *,int) (278)
+</pre><pre>{
+	capacity = 4;
+	size = 4;
+	canary_l = c0dedeadc0dedead;
+	canary_r = c0dedeadc0dedead;
+	struct_hash = 2113845351;
+	expected struct_hash = 2113845351;
+	data_hash = 3604469477;
+	expected data_hash = 3604469477;
+	buffer &#60int&#62 [&0000029416FC8AF8]
+	{
+		 left_canary = c0dedeadc0dedead
+		*[0] = 6
+		*[1] = 5
+		*[2] = -1
+		*[3] = -18
+		 right_canary = c0dedeadc0dedead
+	}
+}</pre><pre>[Oct  7 2021] [03:09:02] Stack &#60int&#62 [&00000096BCCFF710] "st" <em style = "color : #00FA9A">ok</em> at int __cdecl main(int,char **) at E:\Work\Stack\Stack\main.cpp (8); called from unsigned __int64 __cdecl StackPush(struct stack_t *,int) (262)
+</pre><pre>{
+	capacity = 4;
+	size = 4;
+	canary_l = c0dedeadc0dedead;
+	canary_r = c0dedeadc0dedead;
+	struct_hash = 2113845351;
+	expected struct_hash = 2113845351;
+	data_hash = 3604469477;
+	expected data_hash = 3604469477;
+	buffer &#60int&#62 [&0000029416FC8AF8]
+	{
+		 left_canary = c0dedeadc0dedead
+		*[0] = 6
+		*[1] = 5
+		*[2] = -1
+		*[3] = -18
+		 right_canary = c0dedeadc0dedead
+	}
+}</pre><pre>[Oct  7 2021] [03:09:02] Stack &#60int&#62 [&00000096BCCFF710] "st" <em style = "color : #00FA9A">ok</em> at int __cdecl main(int,char **) at E:\Work\Stack\Stack\main.cpp (8); called from unsigned __int64 __cdecl StackResize(struct stack_t *,long) (215)
+</pre><pre>{
+	capacity = 4;
+	size = 4;
+	canary_l = c0dedeadc0dedead;
+	canary_r = c0dedeadc0dedead;
+	struct_hash = 2113845351;
+	expected struct_hash = 2113845351;
+	data_hash = 3604469477;
+	expected data_hash = 3604469477;
+	buffer &#60int&#62 [&0000029416FC8AF8]
+	{
+		 left_canary = c0dedeadc0dedead
+		*[0] = 6
+		*[1] = 5
+		*[2] = -1
+		*[3] = -18
+		 right_canary = c0dedeadc0dedead
+	}
+}</pre><pre>[Oct  7 2021] [03:09:02] Stack &#60int&#62 [&00000096BCCFF710] "st" <em style = "color : #00FA9A">ok</em> at int __cdecl main(int,char **) at E:\Work\Stack\Stack\main.cpp (8); called from unsigned __int64 __cdecl StackResize(struct stack_t *,long) (256)
+</pre><pre>{
+	capacity = 8;
+	size = 4;
+	canary_l = c0dedeadc0dedead;
+	canary_r = c0dedeadc0dedead;
+	struct_hash = 3856423071;
+	expected struct_hash = 3856423071;
+	data_hash = 3604469477;
+	expected data_hash = 3604469477;
+	buffer &#60int&#62 [&0000029416FC3128]
+	{
+		 left_canary = c0dedeadc0dedead
+		*[0] = 6
+		*[1] = 5
+		*[2] = -1
+		*[3] = -18
+		 [4] = 66 POISON
+		 [5] = 66 POISON
+		 [6] = 66 POISON
+		 [7] = 66 POISON
+		 right_canary = c0dedeadc0dedead
+	}
+}</pre><pre>[Oct  7 2021] [03:09:02] Stack &#60int&#62 [&00000096BCCFF710] "st" <em style = "color : #00FA9A">ok</em> at int __cdecl main(int,char **) at E:\Work\Stack\Stack\main.cpp (8); called from unsigned __int64 __cdecl StackPush(struct stack_t *,int) (278)
+</pre><pre>{
+	capacity = 8;
+	size = 5;
+	canary_l = c0dedeadc0dedead;
+	canary_r = c0dedeadc0dedead;
+	struct_hash = 2160176050;
+	expected struct_hash = 2160176050;
+	data_hash = 2059592057;
+	expected data_hash = 2059592057;
+	buffer &#60int&#62 [&0000029416FC3128]
+	{
+		 left_canary = c0dedeadc0dedead
+		*[0] = 6
+		*[1] = 5
+		*[2] = -1
+		*[3] = -18
+		*[4] = -90
+		 [5] = 66 POISON
+		 [6] = 66 POISON
+		 [7] = 66 POISON
+		 right_canary = c0dedeadc0dedead
+	}
+}</pre><pre>[Oct  7 2021] [03:09:02] Stack &#60int&#62 [&00000096BCCFF710] "st" <em style = "color : #00FA9A">ok</em> at int __cdecl main(int,char **) at E:\Work\Stack\Stack\main.cpp (8); called from int __cdecl StackPop(struct stack_t *,unsigned __int64 *) (284)
+</pre><pre>{
+	capacity = 8;
+	size = 5;
+	canary_l = c0dedeadc0dedead;
+	canary_r = c0dedeadc0dedead;
+	struct_hash = 2160176050;
+	expected struct_hash = 2160176050;
+	data_hash = 2059592057;
+	expected data_hash = 2059592057;
+	buffer &#60int&#62 [&0000029416FC3128]
+	{
+		 left_canary = c0dedeadc0dedead
+		*[0] = 6
+		*[1] = 5
+		*[2] = -1
+		*[3] = -18
+		*[4] = -90
+		 [5] = 66 POISON
+		 [6] = 66 POISON
+		 [7] = 66 POISON
+		 right_canary = c0dedeadc0dedead
+	}
+}</pre><pre>[Oct  7 2021] [03:09:02] Stack &#60int&#62 [&00000096BCCFF710] "st" <em style = "color : #00FA9A">ok</em> at int __cdecl main(int,char **) at E:\Work\Stack\Stack\main.cpp (8); called from int __cdecl StackPop(struct stack_t *,unsigned __int64 *) (315)
+</pre><pre>{
+	capacity = 8;
+	size = 4;
+	canary_l = c0dedeadc0dedead;
+	canary_r = c0dedeadc0dedead;
+	struct_hash = 3856423071;
+	expected struct_hash = 3856423071;
+	data_hash = 3604469477;
+	expected data_hash = 3604469477;
+	buffer &#60int&#62 [&0000029416FC3128]
+	{
+		 left_canary = c0dedeadc0dedead
+		*[0] = 6
+		*[1] = 5
+		*[2] = -1
+		*[3] = -18
+		 [4] = 66 POISON
+		 [5] = 66 POISON
+		 [6] = 66 POISON
+		 [7] = 66 POISON
+		 right_canary = c0dedeadc0dedead
+	}
+}</pre><pre>[Oct  7 2021] [03:09:02] Stack &#60int&#62 [&00000096BCCFF710] "st" <em style = "color : #00FA9A">ok</em> at int __cdecl main(int,char **) at E:\Work\Stack\Stack\main.cpp (8); called from int __cdecl StackPop(struct stack_t *,unsigned __int64 *) (284)
+</pre><pre>{
+	capacity = 8;
+	size = 4;
+	canary_l = c0dedeadc0dedead;
+	canary_r = c0dedeadc0dedead;
+	struct_hash = 3856423071;
+	expected struct_hash = 3856423071;
+	data_hash = 3604469477;
+	expected data_hash = 3604469477;
+	buffer &#60int&#62 [&0000029416FC3128]
+	{
+		 left_canary = c0dedeadc0dedead
+		*[0] = 6
+		*[1] = 5
+		*[2] = -1
+		*[3] = -18
+		 [4] = 66 POISON
+		 [5] = 66 POISON
+		 [6] = 66 POISON
+		 [7] = 66 POISON
+		 right_canary = c0dedeadc0dedead
+	}
+}</pre><pre>[Oct  7 2021] [03:09:02] Stack &#60int&#62 [&00000096BCCFF710] "st" <em style = "color : #00FA9A">ok</em> at int __cdecl main(int,char **) at E:\Work\Stack\Stack\main.cpp (8); called from int __cdecl StackPop(struct stack_t *,unsigned __int64 *) (315)
+</pre><pre>{
+	capacity = 8;
+	size = 3;
+	canary_l = c0dedeadc0dedead;
+	canary_r = c0dedeadc0dedead;
+	struct_hash = 1474771343;
+	expected struct_hash = 1474771343;
+	data_hash = 2436353767;
+	expected data_hash = 2436353767;
+	buffer &#60int&#62 [&0000029416FC3128]
+	{
+		 left_canary = c0dedeadc0dedead
+		*[0] = 6
+		*[1] = 5
+		*[2] = -1
+		 [3] = 66 POISON
+		 [4] = 66 POISON
+		 [5] = 66 POISON
+		 [6] = 66 POISON
+		 [7] = 66 POISON
+		 right_canary = c0dedeadc0dedead
+	}
+}</pre><pre>[Oct  7 2021] [03:09:02] Stack &#60int&#62 [&00000096BCCFF710] "st" <em style = "color : #00FA9A">ok</em> at int __cdecl main(int,char **) at E:\Work\Stack\Stack\main.cpp (8); called from int __cdecl StackPop(struct stack_t *,unsigned __int64 *) (284)
+</pre><pre>{
+	capacity = 8;
+	size = 3;
+	canary_l = c0dedeadc0dedead;
+	canary_r = c0dedeadc0dedead;
+	struct_hash = 1474771343;
+	expected struct_hash = 1474771343;
+	data_hash = 2436353767;
+	expected data_hash = 2436353767;
+	buffer &#60int&#62 [&0000029416FC3128]
+	{
+		 left_canary = c0dedeadc0dedead
+		*[0] = 6
+		*[1] = 5
+		*[2] = -1
+		 [3] = 66 POISON
+		 [4] = 66 POISON
+		 [5] = 66 POISON
+		 [6] = 66 POISON
+		 [7] = 66 POISON
+		 right_canary = c0dedeadc0dedead
+	}
+}</pre><pre>[Oct  7 2021] [03:09:02] Stack &#60int&#62 [&00000096BCCFF710] "st" <em style = "color : #00FA9A">ok</em> at int __cdecl main(int,char **) at E:\Work\Stack\Stack\main.cpp (8); called from unsigned __int64 __cdecl StackResize(struct stack_t *,long) (215)
+</pre><pre>{
+	capacity = 8;
+	size = 2;
+	canary_l = c0dedeadc0dedead;
+	canary_r = c0dedeadc0dedead;
+	struct_hash = 333398734;
+	expected struct_hash = 333398734;
+	data_hash = 2080499365;
+	expected data_hash = 2080499365;
+	buffer &#60int&#62 [&0000029416FC3128]
+	{
+		 left_canary = c0dedeadc0dedead
+		*[0] = 6
+		*[1] = 5
+		 [2] = 66 POISON
+		 [3] = 66 POISON
+		 [4] = 66 POISON
+		 [5] = 66 POISON
+		 [6] = 66 POISON
+		 [7] = 66 POISON
+		 right_canary = c0dedeadc0dedead
+	}
+}</pre><pre>[Oct  7 2021] [03:09:02] Stack &#60int&#62 [&00000096BCCFF710] "st" <em style = "color : #00FA9A">ok</em> at int __cdecl main(int,char **) at E:\Work\Stack\Stack\main.cpp (8); called from unsigned __int64 __cdecl StackResize(struct stack_t *,long) (256)
+</pre><pre>{
+	capacity = 4;
+	size = 2;
+	canary_l = c0dedeadc0dedead;
+	canary_r = c0dedeadc0dedead;
+	struct_hash = 2574031198;
+	expected struct_hash = 2574031198;
+	data_hash = 2080499365;
+	expected data_hash = 2080499365;
+	buffer &#60int&#62 [&0000029416FC3128]
+	{
+		 left_canary = c0dedeadc0dedead
+		*[0] = 6
+		*[1] = 5
+		 [2] = 66 POISON
+		 [3] = 66 POISON
+		 right_canary = c0dedeadc0dedead
+	}
+}</pre><pre>[Oct  7 2021] [03:09:02] Stack &#60int&#62 [&00000096BCCFF710] "st" <em style = "color : #00FA9A">ok</em> at int __cdecl main(int,char **) at E:\Work\Stack\Stack\main.cpp (8); called from int __cdecl StackPop(struct stack_t *,unsigned __int64 *) (315)
+</pre><pre>{
+	capacity = 4;
+	size = 2;
+	canary_l = c0dedeadc0dedead;
+	canary_r = c0dedeadc0dedead;
+	struct_hash = 2574031198;
+	expected struct_hash = 2574031198;
+	data_hash = 2080499365;
+	expected data_hash = 2080499365;
+	buffer &#60int&#62 [&0000029416FC3128]
+	{
+		 left_canary = c0dedeadc0dedead
+		*[0] = 6
+		*[1] = 5
+		 [2] = 66 POISON
+		 [3] = 66 POISON
+		 right_canary = c0dedeadc0dedead
+	}
+}</pre><pre>[Oct  7 2021] [03:09:02] Stack &#60int&#62 [&00000096BCCFF710] "st" <em style = "color : #00FA9A">ok</em> at int __cdecl main(int,char **) at E:\Work\Stack\Stack\main.cpp (8); called from int __cdecl StackPop(struct stack_t *,unsigned __int64 *) (284)
+</pre><pre>{
+	capacity = 4;
+	size = 2;
+	canary_l = c0dedeadc0dedead;
+	canary_r = c0dedeadc0dedead;
+	struct_hash = 2574031198;
+	expected struct_hash = 2574031198;
+	data_hash = 2080499365;
+	expected data_hash = 2080499365;
+	buffer &#60int&#62 [&0000029416FC3128]
+	{
+		 left_canary = c0dedeadc0dedead
+		*[0] = 6
+		*[1] = 5
+		 [2] = 66 POISON
+		 [3] = 66 POISON
+		 right_canary = c0dedeadc0dedead
+	}
+}</pre><pre>[Oct  7 2021] [03:09:02] Stack &#60int&#62 [&00000096BCCFF710] "st" <em style = "color : #00FA9A">ok</em> at int __cdecl main(int,char **) at E:\Work\Stack\Stack\main.cpp (8); called from unsigned __int64 __cdecl StackResize(struct stack_t *,long) (215)
+</pre><pre>{
+	capacity = 4;
+	size = 1;
+	canary_l = c0dedeadc0dedead;
+	canary_r = c0dedeadc0dedead;
+	struct_hash = 2244739556;
+	expected struct_hash = 2244739556;
+	data_hash = 2641212525;
+	expected data_hash = 2641212525;
+	buffer &#60int&#62 [&0000029416FC3128]
+	{
+		 left_canary = c0dedeadc0dedead
+		*[0] = 6
+		 [1] = 66 POISON
+		 [2] = 66 POISON
+		 [3] = 66 POISON
+		 right_canary = c0dedeadc0dedead
+	}
+}</pre><pre>[Oct  7 2021] [03:09:02] Stack &#60int&#62 [&00000096BCCFF710] "st" <em style = "color : #00FA9A">ok</em> at int __cdecl main(int,char **) at E:\Work\Stack\Stack\main.cpp (8); called from unsigned __int64 __cdecl StackResize(struct stack_t *,long) (256)
+</pre><pre>{
+	capacity = 2;
+	size = 1;
+	canary_l = c0dedeadc0dedead;
+	canary_r = c0dedeadc0dedead;
+	struct_hash = 1103074894;
+	expected struct_hash = 1103074894;
+	data_hash = 2641212525;
+	expected data_hash = 2641212525;
+	buffer &#60int&#62 [&0000029416FC3128]
+	{
+		 left_canary = c0dedeadc0dedead
+		*[0] = 6
+		 [1] = 66 POISON
+		 right_canary = c0dedeadc0dedead
+	}
+}</pre><pre>[Oct  7 2021] [03:09:02] Stack &#60int&#62 [&00000096BCCFF710] "st" <em style = "color : #00FA9A">ok</em> at int __cdecl main(int,char **) at E:\Work\Stack\Stack\main.cpp (8); called from int __cdecl StackPop(struct stack_t *,unsigned __int64 *) (315)
+</pre><pre>{
+	capacity = 2;
+	size = 1;
+	canary_l = c0dedeadc0dedead;
+	canary_r = c0dedeadc0dedead;
+	struct_hash = 1103074894;
+	expected struct_hash = 1103074894;
+	data_hash = 2641212525;
+	expected data_hash = 2641212525;
+	buffer &#60int&#62 [&0000029416FC3128]
+	{
+		 left_canary = c0dedeadc0dedead
+		*[0] = 6
+		 [1] = 66 POISON
+		 right_canary = c0dedeadc0dedead
+	}
+}</pre><pre>[Oct  7 2021] [03:09:02] Stack &#60int&#62 [&00000096BCCFF710] "st" <em style = "color : #00FA9A">ok</em> at int __cdecl main(int,char **) at E:\Work\Stack\Stack\main.cpp (8); called from int __cdecl StackPop(struct stack_t *,unsigned __int64 *) (284)
+</pre><pre>{
+	capacity = 2;
+	size = 1;
+	canary_l = c0dedeadc0dedead;
+	canary_r = c0dedeadc0dedead;
+	struct_hash = 1103074894;
+	expected struct_hash = 1103074894;
+	data_hash = 2641212525;
+	expected data_hash = 2641212525;
+	buffer &#60int&#62 [&0000029416FC3128]
+	{
+		 left_canary = c0dedeadc0dedead
+		*[0] = 6
+		 [1] = 66 POISON
+		 right_canary = c0dedeadc0dedead
+	}
+}</pre><pre>[Oct  7 2021] [03:09:02] Stack &#60int&#62 [&00000096BCCFF710] "st" <em style = "color : #00FA9A">ok</em> at int __cdecl main(int,char **) at E:\Work\Stack\Stack\main.cpp (8); called from unsigned __int64 __cdecl StackResize(struct stack_t *,long) (215)
+</pre><pre>{
+	capacity = 2;
+	size = 0;
+	canary_l = c0dedeadc0dedead;
+	canary_r = c0dedeadc0dedead;
+	struct_hash = 3238672926;
+	expected struct_hash = 3238672926;
+	data_hash = 0;
+	expected data_hash = 0;
+	buffer &#60int&#62 [&0000029416FC3128]
+	{
+		 left_canary = c0dedeadc0dedead
+		 [0] = 66 POISON
+		 [1] = 66 POISON
+		 right_canary = c0dedeadc0dedead
+	}
+}</pre><pre>[Oct  7 2021] [03:09:02] Stack &#60int&#62 [&00000096BCCFF710] "st" <em style = "color : #00FA9A">ok</em> at int __cdecl main(int,char **) at E:\Work\Stack\Stack\main.cpp (8); called from unsigned __int64 __cdecl StackResize(struct stack_t *,long) (256)
+</pre><pre>{
+	capacity = 1;
+	size = 0;
+	canary_l = c0dedeadc0dedead;
+	canary_r = c0dedeadc0dedead;
+	struct_hash = 2912833110;
+	expected struct_hash = 2912833110;
+	data_hash = 0;
+	expected data_hash = 0;
+	buffer &#60int&#62 [&0000029416FC3128]
+	{
+		 left_canary = c0dedeadc0dedead
+		 [0] = 66 POISON
+		 right_canary = c0dedeadc0dedead
+	}
+}</pre><pre>[Oct  7 2021] [03:09:02] Stack &#60int&#62 [&00000096BCCFF710] "st" <em style = "color : #00FA9A">ok</em> at int __cdecl main(int,char **) at E:\Work\Stack\Stack\main.cpp (8); called from int __cdecl StackPop(struct stack_t *,unsigned __int64 *) (315)
+</pre><pre>{
+	capacity = 1;
+	size = 0;
+	canary_l = c0dedeadc0dedead;
+	canary_r = c0dedeadc0dedead;
+	struct_hash = 2912833110;
+	expected struct_hash = 2912833110;
+	data_hash = 0;
+	expected data_hash = 0;
+	buffer &#60int&#62 [&0000029416FC3128]
+	{
+		 left_canary = c0dedeadc0dedead
+		 [0] = 66 POISON
+		 right_canary = c0dedeadc0dedead
+	}
+}</pre><pre>[Oct  7 2021] [03:09:02] Stack &#60int&#62 [&00000096BCCFF710] "st" <em style = "color : #00FA9A">ok</em> at int __cdecl main(int,char **) at E:\Work\Stack\Stack\main.cpp (8); called from int __cdecl StackPop(struct stack_t *,unsigned __int64 *) (284)
+</pre><pre>{
+	capacity = 1;
+	size = 0;
+	canary_l = c0dedeadc0dedead;
+	canary_r = c0dedeadc0dedead;
+	struct_hash = 2912833110;
+	expected struct_hash = 2912833110;
+	data_hash = 0;
+	expected data_hash = 0;
+	buffer &#60int&#62 [&0000029416FC3128]
+	{
+		 left_canary = c0dedeadc0dedead
+		 [0] = 66 POISON
+		 right_canary = c0dedeadc0dedead
+	}
+}</pre><p style = "color : red">ERROR: zero elements pop</p><pre>[Oct  7 2021] [03:09:02] Stack &#60int&#62 [&00000096BCCFF710] "st" <em style = "color : #00FA9A">ok</em> at int __cdecl main(int,char **) at E:\Work\Stack\Stack\main.cpp (8); called from unsigned __int64 __cdecl StackPush(struct stack_t *,int) (262)
+</pre><pre>{
+	capacity = 1;
+	size = 0;
+	canary_l = c0dedeadc0dedead;
+	canary_r = c0dedeadc0dedead;
+	struct_hash = 2912833110;
+	expected struct_hash = 2912833110;
+	data_hash = 0;
+	expected data_hash = 0;
+	buffer &#60int&#62 [&0000029416FC3128]
+	{
+		 left_canary = c0dedeadc0dedead
+		 [0] = 66 POISON
+		 right_canary = c0dedeadc0dedead
+	}
+}</pre><pre>[Oct  7 2021] [03:09:02] Stack &#60int&#62 [&00000096BCCFF710] "st" <em style = "color : #00FA9A">ok</em> at int __cdecl main(int,char **) at E:\Work\Stack\Stack\main.cpp (8); called from unsigned __int64 __cdecl StackPush(struct stack_t *,int) (278)
+</pre><pre>{
+	capacity = 1;
+	size = 1;
+	canary_l = c0dedeadc0dedead;
+	canary_r = c0dedeadc0dedead;
+	struct_hash = 918320400;
+	expected struct_hash = 918320400;
+	data_hash = 1904040534;
+	expected data_hash = 1904040534;
+	buffer &#60int&#62 [&0000029416FC3128]
+	{
+		 left_canary = c0dedeadc0dedead
+		*[0] = 993
+		 right_canary = c0dedeadc0dedead
+	}
+}</pre><pre>[Oct  7 2021] [03:09:02] Stack &#60int&#62 [&00000096BCCFF710] "st" <em style = "color : #00FA9A">ok</em> at int __cdecl main(int,char **) at E:\Work\Stack\Stack\main.cpp (8); called from unsigned __int64 __cdecl StackDtor(struct stack_t *) (386)
+</pre><pre>{
+	capacity = 1;
+	size = 1;
+	canary_l = c0dedeadc0dedead;
+	canary_r = c0dedeadc0dedead;
+	struct_hash = 918320400;
+	expected struct_hash = 918320400;
+	data_hash = 1904040534;
+	expected data_hash = 1904040534;
+	buffer &#60int&#62 [&0000029416FC3128]
+	{
+		 left_canary = c0dedeadc0dedead
+		*[0] = 993
 		 right_canary = c0dedeadc0dedead
 	}
 }</pre><em style = "color : #00FA9A">Stack Destructed</em>

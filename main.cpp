@@ -9,29 +9,25 @@ int main (int argc, char** argv)
 
     StackPush (&st, 6);                          
     StackPush (&st, 5);
-    StackPush (&st, 3);
-    StackPush (&st, 1);    
-    
-    //st.size = -1; // Wanted error
-    
     StackPush (&st, -1);
     StackPush (&st, -18);
     StackPush (&st, -90);
 
-    StackPop (&st);
-    StackPop (&st);
-    StackPop (&st);
-
-    StackPush (&st, 1000-3);
-
     uint64_t err = 0;
-    printf ("%d\n", StackTop (&st, &err));
-    printf ("%d\n", StackTop (&st, &err));
-    printf ("%d\n", StackTop (&st, &err));
+
+    printf ("%d\n", StackPop (&st, &err));
+    printf ("%d\n", StackPop (&st, &err));
+    
+    //st.size = -1; // Wanted error    
+
+    printf ("%d\n", StackPop (&st, &err));
+    printf ("%d\n", StackPop (&st, &err));
+    printf ("%d\n", StackPop (&st, &err));
+    printf ("%d\n", StackPop (&st, &err));
+
+    StackPush (&st, 1000-7);
 
     StackDtor (&st);
-
-    close_log ();
 
     return 0;
 }

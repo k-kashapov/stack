@@ -29,11 +29,7 @@ uint64_t StackInit_ (stack_t *stk, const char *file_name, const char *func_name,
             stk->line = line;
             stk->name = name;
 
-            char log_name[50];
-            strcpy (log_name, name);
-            strcat (log_name, "_log.html");
-
-            log_file = fopen (log_name, "wt");
+            log_file = fopen ("log.html", "wt");
         }
     #endif 
 
@@ -47,6 +43,7 @@ uint64_t StackInit_ (stack_t *stk, const char *file_name, const char *func_name,
         COUNT_DATA_HASH  (stk, stk->data_hash);
     #endif
 
+    STACK_OK (stk);
     return OK;
 }
 
@@ -159,7 +156,11 @@ uint64_t StackDump (stack_t *stk, uint64_t err, const char *called_from, const i
             PRINT_ERR (err, DATA_HASH_INVALID);
         }
     
-        if (err)
+        #ifdef MAX_INFO
+            if (1)
+        #else 
+            if (err)
+        #endif
         {
             fprintf (log_file, "<pre>{\n\tcapacity = %d;\n\tsize = %d;",\
                      stk->capacity, stk->size);                                                                                                             
@@ -286,7 +287,7 @@ type_t StackPop (stack_t* stk, uint64_t *err_ptr)
     {
         if (stk->size < 1)
         {
-            printf ("ERROR: 0 elements in stack\n");
+            if (log_file) fprintf (log_file, "<p style = \"color : red\">ERROR: zero elements pop</p>");
             *err_ptr = ZERO_ELEM_POP;
             return ZERO_ELEM_POP;
         }
@@ -295,21 +296,21 @@ type_t StackPop (stack_t* stk, uint64_t *err_ptr)
     type_t copy = *(stk->buffer + stk->size - 1);
 
     stk->buffer[--stk->size] = POISON;
+    
+    #ifdef HASH_PROTECTION
+        COUNT_STACK_HASH (stk, stk->struct_hash);    
+        COUNT_DATA_HASH (stk, stk->data_hash);    
+    #endif
 
     if (stk->size <= stk->capacity / 4)
     {
-        uint64_t resize_error = StackResize (stk, stk->size / 2);
+        uint64_t resize_error = StackResize (stk, stk->capacity / 2);
         if (resize_error) 
         {
             if (err_ptr) *err_ptr = resize_error;
             return -1;
         }
     }
-
-    #ifdef HASH_PROTECTION
-        COUNT_STACK_HASH (stk, stk->struct_hash);    
-        COUNT_DATA_HASH (stk, stk->data_hash);    
-    #endif
 
     STACK_OK (stk); 
     return copy;
@@ -323,7 +324,7 @@ type_t StackTop (stack_t *stk, uint64_t *err_ptr)
     {
         if (stk->size < 1)
         {
-            printf ("ERROR: 0 elements in stack\n");
+            if (log_file) fprintf (log_file, "<p style = \"color : red\">ERROR: zero elements top</p>");
             *err_ptr = ZERO_ELEM_POP;
             return ZERO_ELEM_POP;
         }
@@ -398,7 +399,8 @@ uint64_t StackDtor (stack_t *stk)
     #ifdef DEBUG_INFO
         if (log_file) fprintf (log_file, "<em style = \"color : #00FA9A\">Stack Destructed</em>");
     #endif // DEBUG_INFO
-
+    
+    close_log ();
     return OK;
 }
 
