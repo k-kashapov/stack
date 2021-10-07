@@ -2,7 +2,7 @@
 
 extern const char *_type_name;
 
-int main (int argc, char** argv)
+int main (int argc, const char** argv)
 {                              
     stack_t st = {};
     StackInit(st);
@@ -18,7 +18,7 @@ int main (int argc, char** argv)
     printf ("%d\n", StackPop (&st, &err));
     printf ("%d\n", StackPop (&st, &err));
     
-    //st.size = -1; // Wanted error    
+    st.size = -1; // Wanted error    
 
     printf ("%d\n", StackPop (&st, &err));
     printf ("%d\n", StackPop (&st, &err));
