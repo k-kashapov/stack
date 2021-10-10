@@ -117,7 +117,7 @@ uint64_t StackError (stack_t *stk)
     #endif
 
     #ifdef CHECK_POISON
-        for (int iter = stk->size; iter > 0 && iter < stk->capacity; iter++)
+        for (int iter = stk->size; iter > 0 && iter < stk->capacity - 1; iter++)
         {
             if (stk->buffer [iter] != POISON)
             {

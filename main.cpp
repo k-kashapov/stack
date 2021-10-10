@@ -15,16 +15,6 @@ int main (int argc, const char** argv)
 
     uint64_t err = 0;
 
-    printf ("%d\n", StackPop (&st, &err));
-    printf ("%d\n", StackPop (&st, &err));
-    
-    st.size = -1; // Wanted error    
-
-    printf ("%d\n", StackPop (&st, &err));
-    printf ("%d\n", StackPop (&st, &err));
-    printf ("%d\n", StackPop (&st, &err));
-    printf ("%d\n", StackPop (&st, &err));
-
     StackPush (&st, 1000-7);
 
     StackDtor (&st);
