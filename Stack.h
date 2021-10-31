@@ -22,24 +22,24 @@ typedef int type_t;
 
 #ifdef DEBUG_INFO
     #define StackInit(stk)                                        \
-        StackInit_ (&stk, __FILE__, __FUNCSIG__, __LINE__, #stk); 
+        StackInit_ (&stk, __FILE__, __FUNCTION__, __LINE__, #stk);
 
     #define STACK_OK(stk)                                  \
         Stack_Err = StackError (stk);                      \
-        StackDump (stk, Stack_Err, __FUNCSIG__, __LINE__); \
+        StackDump (stk, Stack_Err, __FUNCTION__, __LINE__); \
         if (Stack_Err) return Stack_Err;
 #else
     #define StackInit(stk) \
         StackInit_ (&stk)
 
-    #define STACK_OK(stk) 
-#endif 
+    #define STACK_OK(stk)
+#endif
 
 #ifdef HASH_PROTECTION
     #define COUNT_STACK_HASH(stk, res)                                                 \
         int len = sizeof (*stk) - sizeof (stk->struct_hash) - sizeof (stk->data_hash); \
         res = MurmurHash (stk, len);
-                         
+
     #define COUNT_DATA_HASH(stk, res)                                \
         res = MurmurHash (stk->buffer, stk->size * sizeof (type_t));
 #endif
@@ -51,13 +51,13 @@ typedef int type_t;
 #define REALLOC(ptr, init_len, new_len, ptr_type)         \
     ptr_type *buff = (ptr_type *) realloc (ptr, new_len); \
     assert (buff);                                        \
-    ptr = buff;            
+    ptr = buff;
 
 struct stack_t
 {
     #ifdef CANARY_PROTECTION
         uint64_t canary_l;
-    #endif 
+    #endif
 
     type_t *buffer;
     int    capacity;
@@ -73,7 +73,7 @@ struct stack_t
     #ifdef CANARY_PROTECTION
         uint64_t canary_r;
     #endif
-    
+
     #ifdef HASH_PROTECTION
         unsigned int struct_hash;
         unsigned int data_hash;
@@ -81,7 +81,7 @@ struct stack_t
 };
 
 enum ErrorCodes
-{                          
+{
     OK =                       0x0000,
     BAD_PTR =                  0x0001,
     MEM_ALLOC_ERR =            0x0002,
@@ -98,7 +98,7 @@ enum ErrorCodes
     DATA_HASH_INVALID =        0x1000
 };
 
-//  Убирает предупреждение о функциях библиотеки stdlib.h в Visual Studio
+//  пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ stdlib.h пїЅ Visual Studio
 #pragma warning(disable:4996)
 
 uint64_t StackDump (stack_t *stk, uint64_t err, const char *called_from, const int line_called_from);
@@ -111,7 +111,7 @@ uint64_t StackDtor (stack_t *stk);
 
 uint64_t StackError (stack_t *stk);
 
-uint64_t StackPush (stack_t* stk, type_t value);   
+uint64_t StackPush (stack_t* stk, type_t value);
 
 type_t StackPop (stack_t* stk, uint64_t *err = NULL);
 
